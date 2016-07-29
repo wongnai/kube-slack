@@ -77,29 +77,16 @@ function main(){
 			let kibanaUrl = '';
 			if(process.env.KIBANA_URL){
 				kibanaUrl = `${process.env.KIBANA_URL}/app/kibana#/discover?_g=()&_a=(columns:!(log,stream),index:'logstash-*',interval:auto,query:(query_string:(analyze_wildcard:!t,query:'kubernetes.pod:%20${encodeURIComponent(item.pod.metadata.name)}%20%26%26%20kubernetes.container_name:%20${encodeURIComponent(item.name)}')),sort:!('@timestamp',desc))`;
+				kibanaUrl = `(<${kibanaUrl}|View in Kibana>)`;
 			}
 
 			attachments.push({
-				fallback: `Container ${item.name} of pod ${item.pod.metadata.name} (namespace ${item.pod.metadata.namespace}) entered status ${item.state.waiting.reason} (${item.state.waiting.message})`,
+				fallback: `Container ${item.name} of pod ${item.pod.metadata.name} entered status ${item.state.waiting.reason} (${item.state.waiting.message})`,
 				color: 'danger',
 				footer: item.state.waiting.message,
-				text: kibanaUrl ? `<${kibanaUrl}|View in Kibana>` : '',
-				fields: [
-					{
-						title: 'Container',
-						value: item.name,
-						short: true,
-					},
-					{
-						title: 'Pod',
-						value: item.pod.metadata.name,
-						short: true,
-					},
-					{
-						title: 'Reason',
-						value: item.state.waiting.reason,
-					},
-				],
+				title: item.pod.metadata.name,
+				text: `*${item.name}* entered status *${item.state.waiting.reason}* ${kibanaUrl}`,
+				mrkdwn_in: ['text'],
 			});
 		}
 		slack.send({
