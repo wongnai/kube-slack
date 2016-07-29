@@ -7,8 +7,8 @@ let mapReduce = require('./mapreduce');
 
 Promise.promisifyAll(childProcess);
 
-let expireCount = 3; // expire in 3 ticks
-let ticks = 10000;
+let expireCount = process.env.EXPIRE_TICK || 4;
+let ticks = process.env.TICK_RATE || 15000;
 
 function getPods(){
 	let child = childProcess.spawn('kubectl', ['--namespace', process.env.NAMESPACE || 'default', 'get', 'pod', '-o', 'json']);
@@ -90,7 +90,7 @@ function main(){
 			});
 		}
 		slack.send({
-			text: 'The following container(s) is in waiting status',
+			text: 'The following container(s) entered waiting status',
 			attachments: attachments,
 		}).then(() => {
 			console.log(`Sent ${attachments.length} to slack`);
