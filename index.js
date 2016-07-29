@@ -52,7 +52,7 @@ function floodFilter(item){
 function main(){
 	if(!process.env.SLACK_URL){
 		console.error('SLACK_URL is not set');
-		return;
+		process.exit(1);
 	}
 	let slack = new Slack(process.env.SLACK_URL);
 
