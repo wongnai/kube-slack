@@ -22,6 +22,9 @@ function getPods(){
 }
 
 function toContainers(item, emit){
+	if(!item.status.containerStatuses){
+		return;
+	}
 	for(let container of item.status.containerStatuses){
 		container.pod = item;
 		emit(container);
@@ -41,7 +44,7 @@ function expireStore(){
 
 function floodFilter(item){
 	let result = true;
-	let key = `${item.name}-${item.pod.metadata.name}`;
+	let key = `${item.name} ${item.pod.metadata.name}`;
 	if(floodStore[key]){
 		result = false;
 	}
@@ -71,10 +74,16 @@ function main(){
 		}
 		let attachments = [];
 		for(let item of items){
+			let kibanaUrl = '';
+			if(process.env.KIBANA_URL){
+				kibanaUrl = `${process.env.KIBANA_URL}/app/kibana#/discover?_g=()&_a=(columns:!(log,stream),index:'logstash-*',interval:auto,query:(query_string:(analyze_wildcard:!t,query:'kubernetes.pod:%20${encodeURIComponent(item.pod.metadata.name)}%20%26%26%20kubernetes.container_name:%20${encodeURIComponent(item.name)}')),sort:!('@timestamp',desc))`;
+			}
+
 			attachments.push({
 				fallback: `Container ${item.name} of pod ${item.pod.metadata.name} (namespace ${item.pod.metadata.namespace}) entered status ${item.state.waiting.reason} (${item.state.waiting.message})`,
 				color: 'danger',
 				footer: item.state.waiting.message,
+				text: kibanaUrl ? `<${kibanaUrl}|View in Kibana>` : '',
 				fields: [
 					{
 						title: 'Container',
@@ -97,7 +106,7 @@ function main(){
 			text: 'The following container(s) entered waiting status',
 			attachments: attachments,
 		}).then(() => {
-			console.log(`Sent ${attachments.length} to slack`);
+			console.log(`Sent ${attachments.length} status to slack`);
 		}, (e) => {
 			console.error(e);
 		});
