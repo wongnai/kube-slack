@@ -86,6 +86,10 @@ function main(){
 						value: item.pod.metadata.name,
 						short: true,
 					},
+					{
+						title: 'Reason',
+						value: item.state.waiting.reason,
+					},
 				],
 			});
 		}
