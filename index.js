@@ -9,6 +9,7 @@ Promise.promisifyAll(childProcess);
 
 let expireCount = process.env.EXPIRE_TICK || 4;
 let ticks = process.env.TICK_RATE || 15000;
+let blacklistReason = ['ContainerCreating'];
 
 function getPods(){
 	let child = childProcess.spawn('kubectl', ['--namespace', process.env.NAMESPACE || 'default', 'get', 'pod', '-o', 'json']);
@@ -64,6 +65,10 @@ function main(){
 	}).then((items) => {
 		return items.filter((item) => {
 			return item.state.waiting;
+		});
+	}).then((items) => {
+		return items.filter((item) => {
+			return !blacklistReason.includes(item.state.waiting.reason);
 		});
 	}).then((items) => {
 		expireStore();
