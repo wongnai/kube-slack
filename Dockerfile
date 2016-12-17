@@ -1,6 +1,22 @@
-FROM node:6
-ADD https://storage.googleapis.com/kubernetes-release/release/v1.3.3/bin/linux/amd64/kubectl /usr/bin/kubectl
-COPY . /app
+FROM node:6-alpine
+
+# Install latest kubectl
+RUN apk add --no-cache curl \
+  && curl -o /usr/bin/kubectl -L https://storage.googleapis.com/kubernetes-release/release/$(curl -s https://storage.googleapis.com/kubernetes-release/release/stable.txt)/bin/linux/amd64/kubectl \
+  && chmod +x /usr/bin/kubectl \
+  && apk del curl
+
+# Don't run as root user
+ENV user kube-slack
+RUN addgroup -S $user && adduser -S -g $user $user
+
 WORKDIR /app
-RUN chmod +x /usr/bin/kubectl && npm install .
+COPY package.json /app
+RUN npm install --production
+
+COPY . /app
+
+RUN chown -R $user:$user /app
+USER $user
+
 CMD ["node", "index.js"]
