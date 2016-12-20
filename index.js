@@ -79,10 +79,13 @@ function main(){
 		}
 		let attachments = [];
 		for(let item of items){
-			let kibanaUrl = '';
-			if(process.env.KIBANA_URL){
-				kibanaUrl = `${process.env.KIBANA_URL}/app/kibana#/discover?_g=()&_a=(columns:!(log,stream),index:'logstash-*',interval:auto,query:(query_string:(analyze_wildcard:!t,query:'kubernetes.pod:%20${encodeURIComponent(item.pod.metadata.name)}%20%26%26%20kubernetes.container_name:%20${encodeURIComponent(item.name)}')),sort:!('@timestamp',desc))`;
-				kibanaUrl = `(<${kibanaUrl}|View in Kibana>)`;
+			let logUrl = '';
+			if(process.env.LOGGING_URL){
+				logUrl = process.env.LOGGING_URL
+					.replace(/%CONTAINER%/g, encodeURIComponent(item.name))
+					.replace(/%POD%/g, encodeURIComponent(item.pod.metadata.name))
+					.replace(/%STATUS%/g, encodeURIComponent(item.state.waiting.reason));
+				logUrl = `(<${logUrl}|View logs>)`;
 			}
 
 			attachments.push({
@@ -90,7 +93,7 @@ function main(){
 				color: 'danger',
 				footer: item.state.waiting.message,
 				title: item.pod.metadata.name,
-				text: `*${item.name}* entered status *${item.state.waiting.reason}* ${kibanaUrl}`,
+				text: `*${item.name}* entered status *${item.state.waiting.reason}* ${logUrl}`,
 				mrkdwn_in: ['text'],
 			});
 		}

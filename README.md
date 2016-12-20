@@ -24,7 +24,7 @@ spec:
     spec:
       containers:
       - name: kube-slack
-        image: willwill/kube-slack:latest
+        image: willwill/kube-slack:v2.0.0
         env:
         - name: SLACK_URL
           value: https://TEAMNAME.slack.com/services/hooks/SERVICE-NAME?token=TOKEN
@@ -36,7 +36,18 @@ Additionally, the following environment variables can be used:
 
 - `TICK_RATE`: How often to update in milliseconds. (Default to 15000 or 15s)
 - `NAMESPACE`: What namespace to watch (default to default namespace). To watch multiple namespaces, spawn multiple instances.
-- `KIBANA_URL`: If you have Kibana logs collector setup, enter base URI for Kibana (eg. https://kibana.example.com). This will add a link to Kibana logs of the failing pod.
+- `LOGGING_URL`: Add link to view logs. Can use the following variables in the URL:
+  - `%CONTAINER%`: Container name
+  - `%POD%`: Pod name
+  - `%STATUS%`: Current status
+
+## Changelog
+
+All versions are available as tags in Docker Hub.
+
+- v2.0.0: Replaced `KIBANA_URL` with `LOGGING_URL`. Use `LOGGING_URL=https://example.com/app/kibana#/discover?_g=()&_a=(columns:!(log,stream),index:'logstash-*',interval:auto,query:(query_string:(analyze_wildcard:!t,query:'kubernetes.pod:%20%POD%%20%26%26%20kubernetes.container_name:%20%CONTAINER%')),sort:!('@timestamp',desc))` for Kibana.
+- v1.1.0: Optimized Dockerfile
+- v1.0.0: Initial release
 
 ## License
 
