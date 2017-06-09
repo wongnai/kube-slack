@@ -12,7 +12,12 @@ let ticks = process.env.TICK_RATE || 15000;
 let blacklistReason = ['ContainerCreating'];
 
 function getPods(){
-	let child = childProcess.spawn('kubectl', ['--namespace', process.env.NAMESPACE || 'default', 'get', 'pod', '-o', 'json']);
+	let child;
+	if (process.argv['--all-namespaces']) {
+		child = childProcess.spawn('kubectl', ['--all-namespaces', 'get', 'pod', '-o', 'json']);	
+	} else {
+		child = childProcess.spawn('kubectl', ['--namespace', process.env.NAMESPACE || 'default', 'get', 'pod', '-o', 'json']);	
+	}
 	let buffer = '';
 	child.stdout.on('data', (txt) => buffer += txt);
 	return new Promise((resolve, reject) => {
@@ -54,6 +59,7 @@ function floodFilter(item){
 }
 
 function main(){
+	console.log("Running main");
 	if(!process.env.SLACK_URL){
 		console.error('SLACK_URL is not set');
 		process.exit(1);
