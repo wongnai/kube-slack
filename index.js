@@ -21,7 +21,6 @@ function getPods(){
 	}
 	let buffer = '';
 	child.stdout.on('data', (txt) => buffer += txt);
-	console.log(buffer);
 	return new Promise((resolve, reject) => {
 		child.stdout.on('end', () => {
 			resolve(JSON.parse(buffer));
