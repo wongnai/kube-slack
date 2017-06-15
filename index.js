@@ -13,13 +13,15 @@ let blacklistReason = ['ContainerCreating'];
 
 function getPods(){
 	let child;
-	if (process.argv['--all-namespaces']) {
-		child = childProcess.spawn('kubectl', ['--all-namespaces', 'get', 'pod', '-o', 'json']);	
+
+	if (process.argv.indexOf('--all-namespaces') > -1) {
+		child = childProcess.spawn('kubectl', ['get', 'pod', '--all-namespaces', '-o', 'json']);	
 	} else {
 		child = childProcess.spawn('kubectl', ['--namespace', process.env.NAMESPACE || 'default', 'get', 'pod', '-o', 'json']);	
 	}
 	let buffer = '';
 	child.stdout.on('data', (txt) => buffer += txt);
+	console.log(buffer);
 	return new Promise((resolve, reject) => {
 		child.stdout.on('end', () => {
 			resolve(JSON.parse(buffer));
@@ -59,7 +61,6 @@ function floodFilter(item){
 }
 
 function main(){
-	console.log("Running main");
 	if(!process.env.SLACK_URL){
 		console.error('SLACK_URL is not set');
 		process.exit(1);
@@ -69,6 +70,7 @@ function main(){
 	getPods().then((pods) => {
 		return mapReduce(pods.items, toContainers);
 	}).then((items) => {
+		console.log(items);
 		return items.filter((item) => {
 			return item.state.waiting;
 		});
