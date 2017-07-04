@@ -69,7 +69,6 @@ function main(){
 	getPods().then((pods) => {
 		return mapReduce(pods.items, toContainers);
 	}).then((items) => {
-		console.log(items);
 		return items.filter((item) => {
 			return item.state.waiting;
 		});
