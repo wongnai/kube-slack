@@ -51,8 +51,6 @@ spec:
     name: kube-slack-test
 ```
 
-
-
 Additionally, the following environment variables can be used:
 
 - `TICK_RATE`: How often to update in milliseconds. (Default to 15000 or 15s)
@@ -61,15 +59,6 @@ Additionally, the following environment variables can be used:
   - `%CONTAINER%`: Container name
   - `%POD%`: Pod name
   - `%STATUS%`: Current status
-
-## Changelog
-
-All versions are available as tags in Docker Hub.
-
-- v2.1.0: Added `--all-namespaces` argument (#8, thanks to @dylannlaw)
-- v2.0.0: Replaced `KIBANA_URL` with `LOGGING_URL`. Use `LOGGING_URL=https://example.com/app/kibana#/discover?_g=()&_a=(columns:!(log,stream),index:'logstash-*',interval:auto,query:(query_string:(analyze_wildcard:!t,query:'kubernetes.pod:%20%POD%%20%26%26%20kubernetes.container_name:%20%CONTAINER%')),sort:!('@timestamp',desc))` for Kibana.
-- v1.1.0: Optimized Dockerfile
-- v1.0.0: Initial release
 
 ## License
 
