@@ -1,8 +1,7 @@
 /* eslint-env node */
 
-let config = require('config');
-let Slack = require('node-slack');
-let FloodFilter = require('./floodFilter');
+const config = require('config');
+const FloodFilter = require('./floodFilter');
 
 class KubeMonitoring {
 	constructor(){
@@ -12,7 +11,9 @@ class KubeMonitoring {
 		this.floodFilter = new FloodFilter();
 		this.floodFilter.expire = config.get('flood_expire');
 
-		this.slack = new Slack(config.get('slack_url'));
+		this.notifiers = require('./notify').map((Item) => {
+			return new Item();
+		});;
 	}
 
 	start(){
@@ -24,14 +25,9 @@ class KubeMonitoring {
 			delete item._key;
 			console.log(item);
 
-			this.slack.send({
-				text: item.text,
-				attachments: [item],
-			}).then(() => {
-				console.log('Message sent');
-			}, (e) => {
-				console.error(e);
-			});
+			for(let notifier of this.notifiers){
+				notifier.notify(item);
+			}
 		};
 
 		for(let item of this.monitors){
