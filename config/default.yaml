@@ -1,0 +1,18 @@
+kube:
+  ## read credentials from cluster config
+  # inCluster: true
+
+  ## read credentails from ~/.kube/config
+  # kubeconfig: true
+
+  ## option get passed to kubernetes-client
+  ## docs: https://github.com/godaddy/kubernetes-client
+  # url: 'http://www.example.com'
+  # version: 'v1'
+  # namespace: 'default'
+
+# polling interval
+interval: 15000
+flood_expire: 60000
+
+# slack_url: 'https://wongnai.slack.com/services/hooks/incoming-webhooks?token=XXXX'

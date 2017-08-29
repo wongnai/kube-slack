@@ -6,7 +6,12 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
 
 ## [Unreleased]
 ### Changed
+- Rewritten
+- Configuration now are read using node-config
 - Updated example to use Deployment (#6)
+
+### Removed
+- `LOGGING_URL` support
 
 ## [2.1.1] - 2016-12-16
 ### Removed
