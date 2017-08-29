@@ -6,7 +6,8 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
 
 ## [Unreleased]
 ### Changed
-- Rewritten
+- Rewritten. Now use [kubernetes-client](https://github.com/godaddy/kubernetes-client) instead of kubectl.
+- Can now support multiple monitoring conditions and notification systems
 - Configuration now are read using node-config
 - Updated example to use Deployment (#6)
 
