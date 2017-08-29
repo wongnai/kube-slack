@@ -1,4 +1,4 @@
-FROM node:6-alpine
+FROM node:8-alpine
 
 # Install latest kubectl
 RUN apk add --no-cache curl \
