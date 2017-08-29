@@ -5,6 +5,9 @@ The format is based on [Keep a Changelog](http://keepachangelog.com/en/1.0.0/)
 and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.html).
 
 ## [Unreleased]
+### Added
+- Check for unready pods
+
 ### Changed
 - Rewritten. Now use [kubernetes-client](https://github.com/godaddy/kubernetes-client) instead of kubectl.
 - Can now support multiple monitoring conditions and notification systems
