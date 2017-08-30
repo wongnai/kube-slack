@@ -13,4 +13,4 @@ COPY . /app
 RUN chown -R $user:$user /app
 USER $user
 
-CMD ["node", "index.js"]
+CMD ["node", "."]
