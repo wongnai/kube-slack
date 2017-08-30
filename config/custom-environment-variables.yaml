@@ -1,9 +1,6 @@
 kube:
   inCluster: KUBE_USE_CLUSTER
   kubeconfig: KUBE_USE_KUBECONFIG
-  url: KUBE_URL
-  version: KUBE_VERSION
-  namespace: NAMESPACE
 
 interval: TICK_RATE
 flood_expire: FLOOD_EXPIRE

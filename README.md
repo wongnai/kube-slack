@@ -38,18 +38,10 @@ spec:
     spec:
       containers:
       - name: kube-slack
-        image: willwill/kube-slack:v2.1.1
-        # comment out args if watching only one namespace
-        args:
-        - node
-        - index.js
-        - --all-namespaces
+        image: willwill/kube-slack:v3.0.0
         env:
         - name: SLACK_URL
           value: https://hooks.slack.com/services/T00000000/B00000000/XXXXXXXXXXXXXXXXXXXXXXXX
-        # if watching only one namespace, uncomment this
-        # - name: NAMESPACE
-        #   value: namespace-to-watch
         resources:
           requests:
             memory: 30M
@@ -77,11 +69,10 @@ spec:
 Additionally, the following environment variables can be used:
 
 - `TICK_RATE`: How often to update in milliseconds. (Default to 15000 or 15s)
-- `NAMESPACE`: What namespace to watch (default to default namespace). To watch multiple namespaces, launch with `--all-namespaces` argument.
-- `LOGGING_URL`: Add link to view logs. Can use the following variables in the URL:
-  - `%CONTAINER%`: Container name
-  - `%POD%`: Pod name
-  - `%STATUS%`: Current status
+- `FLOOD_EXPIRE`: Repeat notification after this many milliseconds has passed after status returned to normal. (Default to 60000 or 60s)
+- `NOT_READY_MIN_TIME`: Time to wait after pod become not ready before notifying. (Default to 60000 or 60s)
+- `KUBE_USE_KUBECONFIG`: Read Kubernetes credentials from active context in ~/.kube/config (default off)
+- `KUBE_USE_CLUSTER`: Read Kubernetes credentials from pod (default on)
 
 ## License
 
