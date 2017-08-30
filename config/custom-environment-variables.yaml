@@ -1,0 +1,12 @@
+kube:
+  inCluster: KUBE_USE_CLUSTER
+  kubeconfig: KUBE_USE_KUBECONFIG
+  url: KUBE_URL
+  version: KUBE_VERSION
+  namespace: NAMESPACE
+
+interval: TICK_RATE
+flood_expire: FLOOD_EXPIRE
+not_ready_min_time: NOT_READY_MIN_TIME
+
+slack_url: SLACK_URL

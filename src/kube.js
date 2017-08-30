@@ -11,10 +11,10 @@ class Kubernetes {
 	getConfig(){
 		let cfg = config.get('kube');
 
-		if(cfg.inCluster){
-			return Api.config.getInCluster();
-		}else if(cfg.kubeconfig){
+		if(cfg.kubeconfig){
 			return Api.config.fromKubeconfig();
+		}else if(cfg.inCluster){
+			return Api.config.getInCluster();
 		}
 
 		// these keys are path to file

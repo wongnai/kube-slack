@@ -1,6 +1,6 @@
 kube:
   ## read credentials from cluster config
-  # inCluster: true
+  inCluster: true
 
   ## read credentails from ~/.kube/config
   # kubeconfig: true
@@ -8,7 +8,7 @@ kube:
   ## option get passed to kubernetes-client
   ## docs: https://github.com/godaddy/kubernetes-client
   # url: 'http://www.example.com'
-  # version: 'v1'
+  version: 'v1'
   # namespace: 'default'
 
 # polling interval
