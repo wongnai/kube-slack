@@ -40,9 +40,9 @@ class PodLongNotReady extends EventEmitter{
 			}
 
 			this.emit('message', {
-				fallback: `Pod ${pod.metadata.name} is not ready: ${readyStatus.reason} - ${readyStatus.message}`,
+				fallback: `Pod ${pod.metadata.namespace}/${pod.metadata.name} is not ready: ${readyStatus.reason} - ${readyStatus.message}`,
 				color: 'danger',
-				title: `${pod.metadata.name}: ${readyStatus.reason}`,
+				title: `${pod.metadata.namespace}/${pod.metadata.name}: ${readyStatus.reason}`,
 				text: readyStatus.message,
 				_key: pod.metadata.name,
 			});

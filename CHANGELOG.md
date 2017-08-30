@@ -6,6 +6,10 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
 
 ## [Unreleased]
 
+## [3.0.1] - 2017-08-30
+### Added
+- Show pod's namespace
+
 ## [3.0.0] - 2017-08-30
 There are breaking changes in this release. If you are using the more advanced features (including logging URL) please read the chagelog carefully.
 
@@ -40,8 +44,9 @@ There are breaking changes in this release. If you are using the more advanced f
 ### Changed
 - Optimized Dockerfile
 
-[Unreleased]: https://github.com/wongnai/kube-slack/compare/v3.0.0...HEAD
-[2.1.1]: https://github.com/wongnai/kube-slack/compare/v3.0.0...v2.1.1
+[Unreleased]: https://github.com/wongnai/kube-slack/compare/v3.0.1...HEAD
+[3.0.1]: https://github.com/wongnai/kube-slack/compare/v3.0.1...v3.0.0
+[3.0.0]: https://github.com/wongnai/kube-slack/compare/v3.0.0...v2.1.1
 [2.1.1]: https://github.com/wongnai/kube-slack/compare/v2.1.1...v2.1.0
 [2.1.0]: https://github.com/wongnai/kube-slack/compare/v2.1.0...v2.0.0
 [2.0.0]: https://github.com/wongnai/kube-slack/compare/v2.0.0...v1.1.0

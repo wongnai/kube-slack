@@ -28,9 +28,9 @@ class PodStatus extends EventEmitter{
 			}
 
 			this.emit('message', {
-				fallback: `Container ${item.name} of pod ${item.pod.metadata.name} entered status ${item.state.waiting.reason} (${item.state.waiting.message})`,
+				fallback: `Container ${item.pod.metadata.namespace}/${item.pod.metadata.name}/${item.name} entered status ${item.state.waiting.reason} (${item.state.waiting.message})`,
 				color: 'danger',
-				title: `${item.pod.metadata.name}/${item.name}`,
+				title: `${item.pod.metadata.namespace}/${item.pod.metadata.name}/${item.name}`,
 				text: `Container entered status *${item.state.waiting.reason}*\n\`\`\`${item.state.waiting.message}\`\`\``,
 				mrkdwn_in: ['text'],
 				_key: `${item.pod.metadata.name}/${item.name}`,
