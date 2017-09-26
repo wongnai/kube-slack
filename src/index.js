@@ -23,7 +23,6 @@ class KubeMonitoring {
 			}
 
 			delete item._key;
-			console.log(item);
 
 			for(let notifier of this.notifiers){
 				notifier.notify(item);
