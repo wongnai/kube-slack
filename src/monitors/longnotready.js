@@ -20,6 +20,10 @@ class PodLongNotReady extends EventEmitter{
 		let pods = await kube.getPods();
 
 		for(let pod of pods){
+			if(!pod.status || !pod.status.conditions){
+				continue;
+			}
+
 			let readyStatus = pod.status.conditions.filter((item) => item.type === 'Ready');
 			
 			if(readyStatus.length === 0){
