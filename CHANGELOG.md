@@ -48,10 +48,11 @@ There are breaking changes in this release. If you are using the more advanced f
 ### Changed
 - Optimized Dockerfile
 
-[Unreleased]: https://github.com/wongnai/kube-slack/compare/v3.0.1...HEAD
-[3.0.1]: https://github.com/wongnai/kube-slack/compare/v3.0.1...v3.0.0
-[3.0.0]: https://github.com/wongnai/kube-slack/compare/v3.0.0...v2.1.1
-[2.1.1]: https://github.com/wongnai/kube-slack/compare/v2.1.1...v2.1.0
-[2.1.0]: https://github.com/wongnai/kube-slack/compare/v2.1.0...v2.0.0
-[2.0.0]: https://github.com/wongnai/kube-slack/compare/v2.0.0...v1.1.0
-[1.1.0]: https://github.com/wongnai/kube-slack/compare/v1.1.0...v1.0.0
+[Unreleased]: https://github.com/wongnai/kube-slack/compare/v3.0.2...HEAD
+[3.0.2]: https://github.com/wongnai/kube-slack/compare/v3.0.1...v3.0.2
+[3.0.1]: https://github.com/wongnai/kube-slack/compare/v3.0.0...v3.0.1
+[3.0.0]: https://github.com/wongnai/kube-slack/compare/v2.1.1...v3.0.0
+[2.1.1]: https://github.com/wongnai/kube-slack/compare/v2.1.0...v2.1.1
+[2.1.0]: https://github.com/wongnai/kube-slack/compare/v2.0.0...v2.1.0
+[2.0.0]: https://github.com/wongnai/kube-slack/compare/v1.1.0...v2.0.0
+[1.1.0]: https://github.com/wongnai/kube-slack/compare/v1.0.0...v1.1.0
