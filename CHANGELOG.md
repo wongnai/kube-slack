@@ -6,6 +6,10 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
 
 ## [Unreleased]
 
+## [3.0.2] - 2017-10-19
+### Fixed
+- Fixed an issue that occur when a pod has no condition (#12, thanks @PanJ)
+
 ## [3.0.1] - 2017-08-30
 ### Added
 - Show pod's namespace
