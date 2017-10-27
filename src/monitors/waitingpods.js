@@ -27,13 +27,19 @@ class PodStatus extends EventEmitter{
 				continue;
 			}
 
+			let key = item.pod.metadata.name;
+
+			if(item.pod.metadata.ownerReferences && item.pod.metadata.ownerReferences.length > 0){
+				key = item.pod.metadata.ownerReferences[0].name;
+			}
+
 			this.emit('message', {
 				fallback: `Container ${item.pod.metadata.namespace}/${item.pod.metadata.name}/${item.name} entered status ${item.state.waiting.reason} (${item.state.waiting.message})`,
 				color: 'danger',
 				title: `${item.pod.metadata.namespace}/${item.pod.metadata.name}/${item.name}`,
 				text: `Container entered status *${item.state.waiting.reason}*\n\`\`\`${item.state.waiting.message}\`\`\``,
 				mrkdwn_in: ['text'],
-				_key: `${item.pod.metadata.name}/${item.name}`,
+				_key: key,
 			});
 		}
 	}

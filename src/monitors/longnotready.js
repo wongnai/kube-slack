@@ -43,12 +43,18 @@ class PodLongNotReady extends EventEmitter{
 				continue;
 			}
 
+			let key = pod.metadata.name;
+
+			if(pod.metadata.ownerReferences && pod.metadata.ownerReferences.length > 0){
+				key = pod.metadata.ownerReferences[0].name;
+			}
+
 			this.emit('message', {
 				fallback: `Pod ${pod.metadata.namespace}/${pod.metadata.name} is not ready: ${readyStatus.reason} - ${readyStatus.message}`,
 				color: 'danger',
 				title: `${pod.metadata.namespace}/${pod.metadata.name}: ${readyStatus.reason}`,
 				text: readyStatus.message,
-				_key: pod.metadata.name,
+				_key: key,
 			});
 		}
 	}

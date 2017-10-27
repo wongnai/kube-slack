@@ -6,6 +6,11 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
 
 ## [Unreleased]
 
+## [3.0.3] - 2017-10-27
+### Changed
+- Pod errors are now grouped by owner (usually replica sets) rather than by pod.
+  - This is because usually when a deployment gone bad, all pods would crash as well resulting in flooding chat messages.
+
 ## [3.0.2] - 2017-10-19
 ### Fixed
 - Fixed an issue that occur when a pod has no condition (#12, thanks @PanJ)
