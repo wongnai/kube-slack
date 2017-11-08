@@ -5,7 +5,7 @@ const kube = require('../kube');
 class PodStatus extends EventEmitter{
 	constructor(){
 		super();
-		this.blacklistReason = ['ContainerCreating'];
+		this.blacklistReason = ['ContainerCreating', 'PodInitializing'];
 	}
 
 	start(){
