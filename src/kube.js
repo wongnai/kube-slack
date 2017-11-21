@@ -6,6 +6,7 @@ const bluebird = require('bluebird');
 class Kubernetes {
 	constructor(){
 		this.kube = new Api.Core(this.getConfig());
+		this.currentNamespaceOnly = config.get('current_namespace_only')
 	}
 
 	getConfig(){
@@ -30,7 +31,11 @@ class Kubernetes {
 
 	getPods(){
 		return bluebird.fromCallback((cb) => {
-			this.kube.pods.get(cb);
+			if(this.currentNamespaceOnly) {
+				this.kube.namespaces.pods.get(cb);
+			}else{
+				this.kube.pods.get(cb);
+			}
 		}).then((list) => {
 			return list.items;
 		});
