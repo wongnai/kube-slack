@@ -73,6 +73,7 @@ Additionally, the following environment variables can be used:
 - `NOT_READY_MIN_TIME`: Time to wait after pod become not ready before notifying. (Default to 60000 or 60s)
 - `KUBE_USE_KUBECONFIG`: Read Kubernetes credentials from active context in ~/.kube/config (default off)
 - `KUBE_USE_CLUSTER`: Read Kubernetes credentials from pod (default on)
+- `KUBE_NAMESPACE_ONLY`: Monitor current namespace only instead of whole cluster (default false)
 
 ## License
 

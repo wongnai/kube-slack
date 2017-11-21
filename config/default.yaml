@@ -11,6 +11,9 @@ kube:
   version: 'v1'
   # namespace: 'default'
 
+# Monitor all namespaces
+currentNamespaceOnly: false
+
 # polling interval
 interval: 15000
 flood_expire: 60000
