@@ -12,7 +12,7 @@ kube:
   # namespace: 'default'
 
 # Monitor all namespaces
-current_namespace_only: false
+currentNamespaceOnly: false
 
 # polling interval
 interval: 15000

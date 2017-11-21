@@ -6,7 +6,7 @@ const bluebird = require('bluebird');
 class Kubernetes {
 	constructor(){
 		this.kube = new Api.Core(this.getConfig());
-		this.currentNamespaceOnly = config.get('current_namespace_only')
+		this.currentNamespaceOnly = config.get('currentNamespaceOnly')
 	}
 
 	getConfig(){

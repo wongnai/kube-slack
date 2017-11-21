@@ -1,7 +1,8 @@
 kube:
   inCluster: KUBE_USE_CLUSTER
   kubeconfig: KUBE_USE_KUBECONFIG
-  current_namespace_only: KUBE_NAMESPACE_ONLY
+
+currentNamespaceOnly: KUBE_NAMESPACE_ONLY
 
 interval: TICK_RATE
 flood_expire: FLOOD_EXPIRE
