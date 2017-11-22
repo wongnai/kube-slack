@@ -61,7 +61,8 @@ There are breaking changes in this release. If you are using the more advanced f
 ### Changed
 - Optimized Dockerfile
 
-[Unreleased]: https://github.com/wongnai/kube-slack/compare/v3.0.4...HEAD
+[Unreleased]: https://github.com/wongnai/kube-slack/compare/v3.1.0...HEAD
+[3.1.0]: https://github.com/wongnai/kube-slack/compare/v3.0.4...v3.1.0
 [3.0.4]: https://github.com/wongnai/kube-slack/compare/v3.0.3...v3.0.4
 [3.0.3]: https://github.com/wongnai/kube-slack/compare/v3.0.2...v3.0.3
 [3.0.2]: https://github.com/wongnai/kube-slack/compare/v3.0.1...v3.0.2
