@@ -6,6 +6,10 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
 
 ## [Unreleased]
 
+## [3.1.0] - 2017-11-22
+## Added
+- `KUBE_NAMESPACE_ONLY` option to monitor only current namespace (#15, thanks @Eddman)
+
 ## [3.0.4] - 2017-11-08
 ## Changed
 - No longer notify pods in status PodInitializing
