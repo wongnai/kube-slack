@@ -17,7 +17,7 @@ class SlackNotifier{
 		}
 
 		return this.slack.send({
-			text: item.text,
+			text: item.text || "Kubernetes Notification:",
 			attachments: [item],
 		}).then(() => {
 			console.log('Slack message sent');
