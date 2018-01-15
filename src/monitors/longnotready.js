@@ -35,6 +35,10 @@ class PodLongNotReady extends EventEmitter{
 			if(readyStatus.status === 'True'){
 				continue;
 			}
+			
+			if(readyStatus.reason === 'PodCompleted'){
+				continue;
+			}
 
 			let notReadySince = new Date(readyStatus.lastTransitionTime).getTime();
 			let notReadyDuration = new Date().getTime() - notReadySince;
