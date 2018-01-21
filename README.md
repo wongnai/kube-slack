@@ -75,6 +75,13 @@ Additionally, the following environment variables can be used:
 - `KUBE_USE_CLUSTER`: Read Kubernetes credentials from pod (default on)
 - `KUBE_NAMESPACE_ONLY`: Monitor current namespace only instead of whole cluster (default false)
 
+In the case you want to ignore some specific deployments, you can mark the deployment with the following annotation:
+```
+annotations:
+  kube-slack/ignore-pod: "true"
+```
+This annotation will make `kube-slack` ignore any error on this particular pod.
+
 ## License
 
 [MIT License](LICENSE)

@@ -20,6 +20,12 @@ class PodStatus extends EventEmitter{
 		let containers = await kube.getContainerStatuses();
 
 		for(let item of containers){
+
+			// Ignore pod if the annotation is set and evaluates to true
+			if(item.pod.metadata.labels['kube-slack/ignore-pod']){
+				continue;
+			}
+
 			if(!item.state.waiting){
 				continue;
 			}

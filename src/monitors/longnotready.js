@@ -20,6 +20,12 @@ class PodLongNotReady extends EventEmitter{
 		let pods = await kube.getPods();
 
 		for(let pod of pods){
+
+			// Ignore pod if the annotation is set and evaluates to true
+			if(pod.metadata.labels['kube-slack/ignore-pod']){
+				continue;
+			}
+
 			if(!pod.status || !pod.status.conditions){
 				continue;
 			}
