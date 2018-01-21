@@ -22,7 +22,7 @@ class PodStatus extends EventEmitter{
 		for(let item of containers){
 
 			// Ignore pod if the annotation is set and evaluates to true
-			if(item.pod.metadata.labels['kube-slack/ignore-pod']){
+			if(item.pod.metadata.annotations['kube-slack/ignore-pod']){
 				continue;
 			}
 
