@@ -6,6 +6,10 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
 
 ## [Unreleased]
 
+## [3.2.0] - 2018-01-24
+## Added
+- Pods can be ignored now with `kube-slack/ignore-pod: "true"` annotation on pod (#19, thanks @chribsen)
+
 ## [3.1.1] - 2018-01-16
 ## Changed
 - No longer notify pods in status PodCompleted (#16 #17, thanks @jstriebel)
