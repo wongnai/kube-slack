@@ -6,6 +6,10 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
 
 ## [Unreleased]
 
+## [3.2.1] - 2018-02-11
+## Changed
+- Fixed regression caused by #19 (#21, #22 reported by @omerozery, fixed by @chribsen)
+
 ## [3.2.0] - 2018-01-24
 ## Added
 - Pods can be ignored now with `kube-slack/ignore-pod: "true"` annotation on pod (#19, thanks @chribsen)
