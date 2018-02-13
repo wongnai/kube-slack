@@ -6,6 +6,10 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
 
 ## [Unreleased]
 
+## [3.2.2] - 2018-02-13
+## Changed
+- More fix to #19 (#22, #24 fixed by @chribsen)
+
 ## [3.2.1] - 2018-02-11
 ## Changed
 - Fixed regression caused by #19 (#21, #22 reported by @omerozery, fixed by @chribsen)
