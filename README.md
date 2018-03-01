@@ -17,7 +17,38 @@ A [Helm](https://helm.sh/) chart is available at [clearbit/charts](https://githu
    5. Select the channel you want the bot to post to and submit.
    6. You can customize the icon and name if you want.
    7. Take note of the "Webhook URL". This will be something like https://hooks.slack.com/services/T00000000/B00000000/XXXXXXXXXXXXXXXXXXXXXXXX
-2. Load this ReplicationController into your Kubernetes. Make sure you set `SLACK_URL` to the Webhook URL.
+2. (optional) If your kubernetes uses RBAC, you should apply the following manifest as well:
+```yml
+---
+kind: ClusterRole
+apiVersion: rbac.authorization.k8s.io/v1
+metadata:
+  name: kube-slack
+rules:
+- apiGroups: [""]
+  resources: ["pods"]
+  verbs: ["get", "watch", "list"]
+---
+apiVersion: v1
+kind: ServiceAccount
+metadata:
+  name: kube-slack
+  namespace: kube-system
+---
+apiVersion: rbac.authorization.k8s.io/v1beta1
+kind: ClusterRoleBinding
+metadata:
+  name: kube-slack
+roleRef:
+  apiGroup: rbac.authorization.k8s.io
+  kind: ClusterRole
+  name: kube-slack
+subjects:
+  - kind: ServiceAccount
+    name: kube-slack
+    namespace: kube-system
+  ```
+Load this Deployment into your Kubernetes. Make sure you set `SLACK_URL` to the Webhook URL and uncomment serviceAccountName if you use RBAC
 
 ```yml
 apiVersion: extensions/v1beta1
@@ -36,6 +67,8 @@ spec:
       labels:
         app: kube-slack
     spec:
+     # Uncomment serviceAccountName if you use RBAC.
+     # serviceAccountName: kube-slack
       containers:
       - name: kube-slack
         image: willwill/kube-slack:v3.2.2
