@@ -5,30 +5,33 @@ The format is based on [Keep a Changelog](http://keepachangelog.com/en/1.0.0/)
 and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.html).
 
 ## [Unreleased]
+### Changed
+- Disabled ContainersNotReady status notification (#27)
+- Added a fallback message when pod are not ready but no reason is set
 
 ## [3.2.2] - 2018-02-13
-## Changed
+### Changed
 - More fix to #19 (#22, #24 fixed by @chribsen)
 
 ## [3.2.1] - 2018-02-11
-## Changed
+### Changed
 - Fixed regression caused by #19 (#21, #22 reported by @omerozery, fixed by @chribsen)
 
 ## [3.2.0] - 2018-01-24
-## Added
+### Added
 - Pods can be ignored now with `kube-slack/ignore-pod: "true"` annotation on pod (#19, thanks @chribsen)
 
 ## [3.1.1] - 2018-01-16
-## Changed
+### Changed
 - No longer notify pods in status PodCompleted (#16 #17, thanks @jstriebel)
 - Updated copyright year
 
 ## [3.1.0] - 2017-11-22
-## Added
+### Added
 - `KUBE_NAMESPACE_ONLY` option to monitor only current namespace (#15, thanks @Eddman)
 
 ## [3.0.4] - 2017-11-08
-## Changed
+### Changed
 - No longer notify pods in status PodInitializing
 
 ## [3.0.3] - 2017-10-27
