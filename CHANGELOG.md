@@ -5,6 +5,8 @@ The format is based on [Keep a Changelog](http://keepachangelog.com/en/1.0.0/)
 and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.html).
 
 ## [Unreleased]
+
+## [3.2.3] - 2018-03-10
 ### Changed
 - Disabled ContainersNotReady status notification (#27)
 - Added a fallback message when pod are not ready but no reason is set
@@ -81,7 +83,10 @@ There are breaking changes in this release. If you are using the more advanced f
 ### Changed
 - Optimized Dockerfile
 
-[Unreleased]: https://github.com/wongnai/kube-slack/compare/v3.1.0...HEAD
+[Unreleased]: https://github.com/wongnai/kube-slack/compare/v3.1.3...HEAD
+[3.1.3]: https://github.com/wongnai/kube-slack/compare/v3.1.2...v3.1.3
+[3.1.2]: https://github.com/wongnai/kube-slack/compare/v3.1.1...v3.1.2
+[3.1.1]: https://github.com/wongnai/kube-slack/compare/v3.1.0...v3.1.1
 [3.1.0]: https://github.com/wongnai/kube-slack/compare/v3.0.4...v3.1.0
 [3.0.4]: https://github.com/wongnai/kube-slack/compare/v3.0.3...v3.0.4
 [3.0.3]: https://github.com/wongnai/kube-slack/compare/v3.0.2...v3.0.3
