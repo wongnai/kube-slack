@@ -16,10 +16,14 @@ class SlackNotifier {
 			return;
 		}
 
+		let channel = item.channel;
+		delete item.channel;
+
 		return this.slack
 			.send({
 				text: item.text || 'Kubernetes Notification:',
 				attachments: [item],
+				channel: channel,
 			})
 			.then(
 				() => {

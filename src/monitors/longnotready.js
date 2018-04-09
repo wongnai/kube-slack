@@ -20,12 +20,17 @@ class PodLongNotReady extends EventEmitter {
 		let pods = await kube.getPods();
 
 		for (let pod of pods) {
-			// Ignore pod if the annotation is set and evaluates to true
-			if (
-				pod.metadata.annotations &&
-				pod.metadata.annotations['kube-slack/ignore-pod']
-			) {
-				continue;
+			let messageProps = {};
+			let annotations = pod.metadata.annotations;
+			if (annotations) {
+				// Ignore pod if the annotation is set and evaluates to true
+				if (annotations['kube-slack/ignore-pod']) {
+					continue;
+				}
+
+				if (annotations['kube-slack/slack-channel']) {
+					messageProps['channel'] = annotations['kube-slack/slack-channel'];
+				}
 			}
 
 			if (!pod.status || !pod.status.conditions) {
@@ -76,6 +81,7 @@ class PodLongNotReady extends EventEmitter {
 				}: ${readyStatus.reason || 'Pod not ready'}`,
 				text: readyStatus.message || 'Pod not ready',
 				_key: key,
+				...messageProps,
 			});
 		}
 	}
