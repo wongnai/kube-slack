@@ -1,13 +1,13 @@
 class FloodFilter {
-	constructor(){
+	constructor() {
 		this._store = {};
 		this.expire = 60000;
 	}
 
-	isAccepted(item){
+	isAccepted(item) {
 		let result = true;
 		let now = new Date().getTime();
-		if(this._store[item] && this._store[item] > now){
+		if (this._store[item] && this._store[item] > now) {
 			result = false;
 		}
 		// reset expiry timer if the item is flooding
