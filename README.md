@@ -7,7 +7,7 @@ it will publish a message in Slack channel.
 
 ## Installation
 
-A [Helm](https://helm.sh/) chart is available at [clearbit/charts](https://github.com/clearbit/charts/tree/master/stable/kube-slack)
+[A Helm chart is available](https://github.com/kubernetes/charts/tree/master/stable/kube-slack)
 
 1. Create an incoming webhook:
    1. In the Slack interface, click on the gears button (Channel Settings) near the search box.
