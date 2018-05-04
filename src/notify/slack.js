@@ -1,12 +1,13 @@
 const config = require('config');
 const Slack = require('node-slack');
+const logger = require('../logger');
 
 class SlackNotifier {
 	constructor() {
 		try {
 			this.slack = new Slack(config.get('slack_url'));
-		} catch (e) {
-			console.error('Could not initialize Slack', e);
+		} catch (err) {
+			logger.error({ err }, 'Could not initialize Slack');
 			this.slack = null;
 		}
 	}
@@ -27,10 +28,10 @@ class SlackNotifier {
 			})
 			.then(
 				() => {
-					console.log('Slack message sent');
+					logger.info('Slack message sent');
 				},
-				e => {
-					console.error(e);
+				err => {
+					logger.error({ err }, 'Could not send notification to Slack');
 				}
 			);
 	}
