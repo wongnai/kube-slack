@@ -6,6 +6,7 @@ class PodLongNotReady extends EventEmitter {
 	constructor() {
 		super();
 		this.minimumTime = config.get('not_ready_min_time');
+		this.clusterName = config.get('cluster_name');
 	}
 
 	start() {
@@ -71,14 +72,17 @@ class PodLongNotReady extends EventEmitter {
 				key = pod.metadata.ownerReferences[0].name;
 			}
 
+			const clusterInfo = this.clusterName ? ` in ${this.clusterName}` : '';
+			const podTitle = `${pod.metadata.namespace}/${
+				pod.metadata.name
+			}${clusterInfo}`;
+
 			this.emit('message', {
-				fallback: `Pod ${pod.metadata.namespace}/${
-					pod.metadata.name
-				} is not ready: ${readyStatus.reason} - ${readyStatus.message}`,
+				fallback: `Pod ${podTitle} is not ready: ${readyStatus.reason} - ${
+					readyStatus.message
+				}`,
 				color: 'danger',
-				title: `${pod.metadata.namespace}/${
-					pod.metadata.name
-				}: ${readyStatus.reason || 'Pod not ready'}`,
+				title: `${podTitle}: ${readyStatus.reason || 'Pod not ready'}`,
 				text: readyStatus.message || 'Pod not ready',
 				_key: key,
 				...messageProps,

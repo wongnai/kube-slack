@@ -6,6 +6,7 @@ class PodStatus extends EventEmitter {
 	constructor() {
 		super();
 		this.blacklistReason = ['ContainerCreating', 'PodInitializing'];
+		this.clusterName = config.get('cluster_name');
 	}
 
 	start() {
@@ -49,16 +50,17 @@ class PodStatus extends EventEmitter {
 				key = item.pod.metadata.ownerReferences[0].name;
 			}
 
+			const clusterInfo = this.clusterName ? ` in ${this.clusterName}` : '';
+			const containerTitle = `${item.pod.metadata.namespace}/${
+				item.pod.metadata.name
+			}/${item.name}${clusterInfo}`;
+
 			this.emit('message', {
-				fallback: `Container ${item.pod.metadata.namespace}/${
-					item.pod.metadata.name
-				}/${item.name} entered status ${item.state.waiting.reason} (${
-					item.state.waiting.message
-				})`,
+				fallback: `Container ${containerTitle} entered status ${
+					item.state.waiting.reason
+				} (${item.state.waiting.message})`,
 				color: 'danger',
-				title: `${item.pod.metadata.namespace}/${item.pod.metadata.name}/${
-					item.name
-				}`,
+				title: containerTitle,
 				text: `Container entered status *${item.state.waiting.reason}*\n\`\`\`${
 					item.state.waiting.message
 				}\`\`\``,
