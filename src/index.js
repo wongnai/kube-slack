@@ -2,6 +2,7 @@
 
 const config = require('config');
 const FloodFilter = require('./floodFilter');
+const logger = require('./logger');
 
 class KubeMonitoring {
 	constructor() {
@@ -38,3 +39,5 @@ class KubeMonitoring {
 }
 
 new KubeMonitoring().start();
+
+logger.info('Kubernetes monitors started');
