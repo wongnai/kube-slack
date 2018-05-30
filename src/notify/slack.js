@@ -4,8 +4,14 @@ const logger = require('../logger');
 
 class SlackNotifier {
 	constructor() {
+		let opts = {};
+
+		if (config.has('slack_proxy')) {
+			opts.proxy = config.get('slack_proxy');
+		}
+
 		try {
-			this.slack = new Slack(config.get('slack_url'));
+			this.slack = new Slack(config.get('slack_url'), opts);
 		} catch (err) {
 			logger.error({ err }, 'Could not initialize Slack');
 			this.slack = null;

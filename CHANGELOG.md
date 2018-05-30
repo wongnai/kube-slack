@@ -6,8 +6,9 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
 
 ## [Unreleased]
 ### Added
-- SLACK_CHANNEL option (#36)
+- `SLACK_CHANNEL` option (#36)
 - Bunyan compatible logging (#32, thanks @phillipj)
+- `SLACK_PROXY` option (#34)
 
 ## [3.3.0] - 2018-04-09
 ### Added
