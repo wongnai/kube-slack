@@ -108,6 +108,7 @@ Additionally, the following environment variables can be used:
 - `KUBE_USE_CLUSTER`: Read Kubernetes credentials from pod (default on)
 - `KUBE_NAMESPACE_ONLY`: Monitor current namespace only instead of whole cluster (default false)
 - `SLACK_CHANNEL`: Override channel to send
+- `SLACK_PROXY`: URL of HTTP proxy used to connect to Slack
 
 ## Annotations
 
