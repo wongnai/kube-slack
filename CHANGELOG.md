@@ -10,6 +10,9 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
 - Bunyan compatible logging (#32, thanks @phillipj)
 - `SLACK_PROXY` option (#34)
 
+### Changed
+- Upgraded node to 10
+
 ## [3.3.0] - 2018-04-09
 ### Added
 - Pods can be notified to a specific channel with `kube-slack/slack-channel` annotation on pod.
