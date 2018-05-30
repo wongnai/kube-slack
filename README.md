@@ -107,6 +107,7 @@ Additionally, the following environment variables can be used:
 - `KUBE_USE_KUBECONFIG`: Read Kubernetes credentials from active context in ~/.kube/config (default off)
 - `KUBE_USE_CLUSTER`: Read Kubernetes credentials from pod (default on)
 - `KUBE_NAMESPACE_ONLY`: Monitor current namespace only instead of whole cluster (default false)
+- `SLACK_CHANNEL`: Override channel to send
 
 ## Annotations
 

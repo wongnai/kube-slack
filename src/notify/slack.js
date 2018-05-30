@@ -17,7 +17,7 @@ class SlackNotifier {
 			return;
 		}
 
-		let channel = item.channel;
+		let channel = item.channel || config.get('slack_channel');
 		delete item.channel;
 
 		return this.slack

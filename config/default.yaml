@@ -20,3 +20,4 @@ flood_expire: 60000
 not_ready_min_time: 60000
 
 # slack_url: 'https://wongnai.slack.com/services/hooks/incoming-webhooks?token=XXXX'
+slack_channel: null
