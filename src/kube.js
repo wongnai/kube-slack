@@ -30,17 +30,10 @@ class Kubernetes {
 	}
 
 	getPods() {
-		return bluebird
-			.fromCallback(cb => {
-				if (this.currentNamespaceOnly) {
-					this.kube.namespaces.pods.get(cb);
-				} else {
-					this.kube.pods.get(cb);
-				}
-			})
-			.then(list => {
-				return list.items;
-			});
+		const promise = this.currentNamespaceOnly
+			? this.kube.namespaces.pods.get()
+			: this.kube.pods.get();
+		return promise.then(list => list.items);
 	}
 
 	async getContainerStatuses() {
