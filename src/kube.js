@@ -1,7 +1,6 @@
 const fs = require('fs');
 const config = require('config');
 const Api = require('kubernetes-client');
-const bluebird = require('bluebird');
 
 class Kubernetes {
 	constructor() {
