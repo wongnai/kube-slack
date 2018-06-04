@@ -1,7 +1,6 @@
 const fs = require('fs');
 const config = require('config');
 const Api = require('kubernetes-client');
-const bluebird = require('bluebird');
 
 class Kubernetes {
 	constructor() {
@@ -30,17 +29,10 @@ class Kubernetes {
 	}
 
 	getPods() {
-		return bluebird
-			.fromCallback(cb => {
-				if (this.currentNamespaceOnly) {
-					this.kube.namespaces.pods.get(cb);
-				} else {
-					this.kube.pods.get(cb);
-				}
-			})
-			.then(list => {
-				return list.items;
-			});
+		const promise = this.currentNamespaceOnly
+			? this.kube.namespaces.pods.get()
+			: this.kube.pods.get();
+		return promise.then(list => list.items);
 	}
 
 	async getContainerStatuses() {

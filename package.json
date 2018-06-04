@@ -4,7 +4,6 @@
   "description": "",
   "main": "src/index.js",
   "dependencies": {
-    "bluebird": "^3.5.1",
     "bunyan": "^1.8.12",
     "config": "^1.30.0",
     "js-yaml": "^3.11.0",
