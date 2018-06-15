@@ -5,6 +5,8 @@ The format is based on [Keep a Changelog](http://keepachangelog.com/en/1.0.0/)
 and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.html).
 
 ## [Unreleased]
+
+## [3.4.0] - 2018-06-15
 ### Added
 - `SLACK_CHANNEL` option (#36)
 - Bunyan compatible logging (#32, thanks @phillipj)
@@ -12,6 +14,7 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
 
 ### Changed
 - Upgraded node to 10
+- Removed bluebird
 
 ## [3.3.0] - 2018-04-09
 ### Added
@@ -94,7 +97,8 @@ There are breaking changes in this release. If you are using the more advanced f
 ### Changed
 - Optimized Dockerfile
 
-[Unreleased]: https://github.com/wongnai/kube-slack/compare/v3.3.0...HEAD
+[Unreleased]: https://github.com/wongnai/kube-slack/compare/v3.4.0...HEAD
+[3.4.0]: https://github.com/wongnai/kube-slack/compare/v3.3.0...v3.4.0
 [3.3.0]: https://github.com/wongnai/kube-slack/compare/v3.2.3...v3.3.0
 [3.2.3]: https://github.com/wongnai/kube-slack/compare/v3.2.2...v3.2.3
 [3.2.2]: https://github.com/wongnai/kube-slack/compare/v3.2.1...v3.2.2
