@@ -13,11 +13,14 @@ class PodLongNotReady extends EventEmitter {
 			this.check();
 		}, config.get('interval'));
 
+		// run an initial check right after the start instead of waiting for first interval to kick in.
+		this.check();
+
 		return this;
 	}
 
 	async check() {
-		let pods = await kube.getPods();
+		let pods = await kube.getWatchedPods();
 
 		for (let pod of pods) {
 			let messageProps = {};

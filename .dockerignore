@@ -2,3 +2,5 @@
 node_modules
 Dockerfile
 config/local*.yaml
+test.env
+.vscode

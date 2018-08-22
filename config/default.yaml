@@ -11,8 +11,8 @@ kube:
   version: 'v1'
   # namespace: 'default'
 
-# Monitor all namespaces
-currentNamespaceOnly: false
+# if set, this must be an array / list of namespaces to watch
+namespaces_only:
 
 # polling interval
 interval: 15000
