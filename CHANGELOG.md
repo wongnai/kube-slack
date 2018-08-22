@@ -6,6 +6,15 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
 
 ## [Unreleased]
 
+## [3.5.0] - 2018-08-21
+### Added
+- `KUBE_NAMESPACES_ONLY` option (#40). Ability add watch multiple explicit namespaces.
+- Start watching right after start of the app instead of waiting for initial interval to expire.
+- Added prettier script to package.json and devDependency
+
+### Removed
+- `KUBE_NAMESPACE_ONLY` support (was broken since 3.4.0 anyways. Now superseded by `KUBE_NAMESPACES_ONLY`)
+
 ## [3.4.0] - 2018-06-15
 ### Added
 - `SLACK_CHANNEL` option (#36)
