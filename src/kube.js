@@ -83,6 +83,12 @@ class Kubernetes {
 			: this.getAllPodsInCluster();
 	}
 
+	async getNodes() {
+		let nodes = await this.kube.nodes.get();
+		
+		return nodes.items;
+	}
+
 	async getContainerStatuses() {
 		let pods = await this.getWatchedPods();
 		let out = [];
