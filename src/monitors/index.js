@@ -1,1 +1,1 @@
-module.exports = [require('./waitingpods'), require('./longnotready')];
+module.exports = [require('./waitingpods'), require('./longnotready'), require('./nodehealth')];

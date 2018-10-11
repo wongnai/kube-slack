@@ -6,6 +6,7 @@ class PodLongNotReady extends EventEmitter {
 	constructor() {
 		super();
 		this.minimumTime = config.get('not_ready_min_time');
+		this.alerted = {};
 	}
 
 	start() {
@@ -23,7 +24,7 @@ class PodLongNotReady extends EventEmitter {
 		let pods = await kube.getWatchedPods();
 
 		for (let pod of pods) {
-			let messageProps = {};
+			this.messageProps = {};
 			let annotations = pod.metadata.annotations;
 			if (annotations) {
 				// Ignore pod if the annotation is set and evaluates to true
@@ -45,16 +46,19 @@ class PodLongNotReady extends EventEmitter {
 			);
 
 			if (readyStatus.length === 0) {
+				this.checkRecovery(pod, readyStatus);
 				continue;
 			}
 
 			readyStatus = readyStatus[0];
 
 			if (readyStatus.status === 'True') {
+				this.checkRecovery(pod, readyStatus);
 				continue;
 			}
 
 			if (readyStatus.reason === 'PodCompleted') {
+				this.checkRecovery(pod, readyStatus);
 				continue;
 			}
 
@@ -74,6 +78,8 @@ class PodLongNotReady extends EventEmitter {
 				key = pod.metadata.ownerReferences[0].name;
 			}
 
+			this.messageProps._key = key;
+
 			this.emit('message', {
 				fallback: `Pod ${pod.metadata.namespace}/${
 					pod.metadata.name
@@ -83,8 +89,26 @@ class PodLongNotReady extends EventEmitter {
 					pod.metadata.name
 				}: ${readyStatus.reason || 'Pod not ready'}`,
 				text: readyStatus.message || 'Pod not ready',
-				_key: key,
-				...messageProps,
+				...this.messageProps,
+			});
+			this.alerted[pod.metadata.name] = pod;
+		}
+	}
+
+	checkRecovery(item, readyStatus) {
+		if(this.alerted[item.metadata.name]) {
+			delete this.alerted[item.metadata.name]
+			this.emit('message', {
+				fallback: `Pod ${item.metadata.namespace}/${
+					item.metadata.name
+				} is ready: ${readyStatus.reason} - ${readyStatus.message}`,
+				color: 'good',
+				title: `${item.metadata.namespace}/${
+					item.metadata.name
+				}: ${readyStatus.reason || 'Pod is ready'}`,
+				text: readyStatus.message || 'Pod is ready',
+				...this.messageProps,
+				_key: this.messageProps._key + "recovery"
 			});
 		}
 	}
