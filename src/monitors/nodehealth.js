@@ -2,7 +2,7 @@ const EventEmitter = require('events');
 const config = require('config');
 const kube = require('../kube');
 
-class PodStatus extends EventEmitter {
+class NodeStatus extends EventEmitter {
 	constructor() {
 		super();
 		this.alerted = {};
@@ -65,4 +65,4 @@ class PodStatus extends EventEmitter {
 	}
 }
 
-module.exports = () => new PodStatus().start();
+module.exports = () => new NodeStatus().start();
