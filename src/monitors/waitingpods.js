@@ -6,6 +6,7 @@ class PodStatus extends EventEmitter {
 	constructor() {
 		super();
 		this.blacklistReason = ['ContainerCreating', 'PodInitializing'];
+		this.alerted = {};
 	}
 
 	start() {
@@ -20,7 +21,7 @@ class PodStatus extends EventEmitter {
 		let containers = await kube.getContainerStatuses();
 
 		for (let item of containers) {
-			let messageProps = {};
+			this.messageProps = {};
 			let annotations = item.pod.metadata.annotations;
 			if (annotations) {
 				// Ignore pod if the annotation is set and evaluates to true
@@ -29,15 +30,9 @@ class PodStatus extends EventEmitter {
 				}
 
 				if (annotations['kube-slack/slack-channel']) {
-					messageProps['channel'] = annotations['kube-slack/slack-channel'];
+					this.messageProps['channel'] =
+						annotations['kube-slack/slack-channel'];
 				}
-			}
-
-			if (!item.state.waiting) {
-				continue;
-			}
-			if (this.blacklistReason.includes(item.state.waiting.reason)) {
-				continue;
 			}
 
 			let key = item.pod.metadata.name;
@@ -47,6 +42,16 @@ class PodStatus extends EventEmitter {
 				item.pod.metadata.ownerReferences.length > 0
 			) {
 				key = item.pod.metadata.ownerReferences[0].name;
+			}
+			this.messageProps._key = key;
+
+			if (!item.state.waiting) {
+				this.checkRecovery(item);
+				continue;
+			}
+			if (this.blacklistReason.includes(item.state.waiting.reason)) {
+				this.checkRecovery(item);
+				continue;
 			}
 
 			this.emit('message', {
@@ -63,9 +68,36 @@ class PodStatus extends EventEmitter {
 					item.state.waiting.message
 				}\`\`\``,
 				mrkdwn_in: ['text'],
-				_key: key,
-				...messageProps,
+				...this.messageProps,
 			});
+			this.alerted[item.name] = item;
+		}
+	}
+
+	checkRecovery(item) {
+		if (
+			this.alerted[item.name] &&
+			item.ready &&
+			this.alerted[item.name].restartCount == item.restartCount
+		) {
+			delete this.alerted[item.name];
+			this.emit('message', {
+				fallback: `Container ${item.pod.metadata.namespace}/${
+					item.pod.metadata.name
+				}/${item.name} ready`,
+				color: 'good',
+				title: `${item.pod.metadata.namespace}/${item.pod.metadata.name}/${
+					item.name
+				}`,
+				text: `Container entered status *${item.pod.status.phase}*\n${
+					item.restartCount
+				} restart${item.restartCount == 1 ? '' : 's'}`,
+				mrkdwn_in: ['text'],
+				...this.messageProps,
+				_key: this.messageProps._key + 'recovery',
+			});
+		} else if (this.alerted[item.name]) {
+			this.alerted[item.name] = item;
 		}
 	}
 }
