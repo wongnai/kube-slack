@@ -30,7 +30,8 @@ class PodStatus extends EventEmitter {
 				}
 
 				if (annotations['kube-slack/slack-channel']) {
-					this.messageProps['channel'] = annotations['kube-slack/slack-channel'];
+					this.messageProps['channel'] =
+						annotations['kube-slack/slack-channel'];
 				}
 			}
 
@@ -45,11 +46,11 @@ class PodStatus extends EventEmitter {
 			this.messageProps._key = key;
 
 			if (!item.state.waiting) {
-				this.checkRecovery(item)
+				this.checkRecovery(item);
 				continue;
 			}
 			if (this.blacklistReason.includes(item.state.waiting.reason)) {
-				this.checkRecovery(item)
+				this.checkRecovery(item);
 				continue;
 			}
 
@@ -67,15 +68,19 @@ class PodStatus extends EventEmitter {
 					item.state.waiting.message
 				}\`\`\``,
 				mrkdwn_in: ['text'],
-				...this.messageProps
+				...this.messageProps,
 			});
 			this.alerted[item.name] = item;
 		}
 	}
 
 	checkRecovery(item) {
-		if(this.alerted[item.name] && item.ready && this.alerted[item.name].restartCount == item.restartCount) {
-			delete this.alerted[item.name]
+		if (
+			this.alerted[item.name] &&
+			item.ready &&
+			this.alerted[item.name].restartCount == item.restartCount
+		) {
+			delete this.alerted[item.name];
 			this.emit('message', {
 				fallback: `Container ${item.pod.metadata.namespace}/${
 					item.pod.metadata.name
@@ -84,12 +89,14 @@ class PodStatus extends EventEmitter {
 				title: `${item.pod.metadata.namespace}/${item.pod.metadata.name}/${
 					item.name
 				}`,
-				text: `Container entered status *${item.pod.status.phase}*\n${item.restartCount} restart${item.restartCount == 1 ? '' : 's'}`,
+				text: `Container entered status *${item.pod.status.phase}*\n${
+					item.restartCount
+				} restart${item.restartCount == 1 ? '' : 's'}`,
 				mrkdwn_in: ['text'],
 				...this.messageProps,
-				_key: this.messageProps._key + "recovery"
+				_key: this.messageProps._key + 'recovery',
 			});
-		} else if(this.alerted[item.name]) {
+		} else if (this.alerted[item.name]) {
 			this.alerted[item.name] = item;
 		}
 	}

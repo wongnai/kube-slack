@@ -96,8 +96,8 @@ class PodLongNotReady extends EventEmitter {
 	}
 
 	checkRecovery(item, readyStatus) {
-		if(this.alerted[item.metadata.name]) {
-			delete this.alerted[item.metadata.name]
+		if (this.alerted[item.metadata.name]) {
+			delete this.alerted[item.metadata.name];
 			this.emit('message', {
 				fallback: `Pod ${item.metadata.namespace}/${
 					item.metadata.name
@@ -108,7 +108,7 @@ class PodLongNotReady extends EventEmitter {
 				}: ${readyStatus.reason || 'Pod is ready'}`,
 				text: readyStatus.message || 'Pod is ready',
 				...this.messageProps,
-				_key: this.messageProps._key + "recovery"
+				_key: this.messageProps._key + 'recovery',
 			});
 		}
 	}
