@@ -6,9 +6,9 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
 
 ## [Unreleased]
 
-## [3.5.1] - 2018-10-12
+## [3.6.0] - 2018-10-18
 ### Added
-- New messages now inform when alerts have recovered for both long ready and not ready pods (#41). 
+- New messages now inform when alerts have recovered for both long ready and not ready pods (#41). - @blandman
 
 ## [3.5.0] - 2018-08-21
 ### Added
@@ -110,7 +110,9 @@ There are breaking changes in this release. If you are using the more advanced f
 ### Changed
 - Optimized Dockerfile
 
-[Unreleased]: https://github.com/wongnai/kube-slack/compare/v3.4.0...HEAD
+[Unreleased]: https://github.com/wongnai/kube-slack/compare/v3.6.0...HEAD
+[3.6.0]: https://github.com/wongnai/kube-slack/compare/v3.5.0...v3.6.0
+[3.5.0]: https://github.com/wongnai/kube-slack/compare/v3.4.0...v3.5.0
 [3.4.0]: https://github.com/wongnai/kube-slack/compare/v3.3.0...v3.4.0
 [3.3.0]: https://github.com/wongnai/kube-slack/compare/v3.2.3...v3.3.0
 [3.2.3]: https://github.com/wongnai/kube-slack/compare/v3.2.2...v3.2.3
