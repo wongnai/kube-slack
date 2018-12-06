@@ -91,13 +91,13 @@ class PodLongNotReady extends EventEmitter {
 				text: readyStatus.message || 'Pod not ready',
 				...this.messageProps,
 			});
-			this.alerted[pod.metadata.name] = pod;
+			this.alerted[`${pod.metadata.namespace}/${pod.metadata.name}`] = pod;
 		}
 	}
 
 	checkRecovery(item, readyStatus) {
-		if (this.alerted[item.metadata.name]) {
-			delete this.alerted[item.metadata.name];
+		if (this.alerted[`${item.metadata.namespace}/${item.metadata.name}`]) {
+			delete this.alerted[`${item.metadata.namespace}/${item.metadata.name}`];
 			this.emit('message', {
 				fallback: `Pod ${item.metadata.namespace}/${
 					item.metadata.name
