@@ -106,7 +106,7 @@ Additionally, the following environment variables can be used:
 - `NOT_READY_MIN_TIME`: Time to wait after pod become not ready before notifying. (Default to 60000 or 60s)
 - `METRICS_CPU`: Enable/disable metric alerting on cpu (Default true)
 - `METRICS_MEMORY`: Enable/disable metric alerting on memory (Default true)
-- `METRICS_ALERT`: Set percentage threshold on metric alerts (Default 80)
+- `METRICS_PERCENT`: Set percentage threshold on metric alerts (Default 80)
 - `KUBE_USE_KUBECONFIG`: Read Kubernetes credentials from active context in ~/.kube/config (default off)
 - `KUBE_USE_CLUSTER`: Read Kubernetes credentials from pod (default on)
 - `KUBE_NAMESPACES_ONLY`: Monitor a list of specific namespaces, specified either as json array or as a string of comma seperated values (`foo_namespace,bar_namespace`).

@@ -6,6 +6,11 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
 
 ## [Unreleased]
 
+## [3.6.0] - 2018-12-06
+## Added
+- New monitor for pod metrics (cpu/memory utilization).
+- Alerts and recovery messages when metrics go above specified threshold.
+
 ## [3.5.1] - 2018-10-12
 ### Added
 - New messages now inform when alerts have recovered for both long ready and not ready pods (#41). 
