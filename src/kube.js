@@ -8,6 +8,8 @@ require('core-js/features/array/flat');
 class Kubernetes {
 	constructor() {
 		this.kube = new Api.Core(this.getConfig());
+		this.metrics = new Api.Client({ config: this.getConfig() });
+
 		let namespaces_only = config.get('namespaces_only');
 		if (namespaces_only) {
 			if (!Array.isArray(namespaces_only)) {
@@ -28,7 +30,6 @@ class Kubernetes {
 
 	getConfig() {
 		let cfg = config.get('kube');
-
 		if (cfg.kubeconfig) {
 			return Api.config.fromKubeconfig();
 		} else if (cfg.inCluster) {
@@ -46,8 +47,28 @@ class Kubernetes {
 		return cfg;
 	}
 
+	getMetricsConfig() {
+		let cfg = this.getConfig();
+		cfg.version = 'metrics.k8s.io/v1beta1';
+		return cfg;
+	}
+
 	async getAllPodsInCluster() {
 		return this.kube.pods.get().then(list => list.items);
+	}
+
+	async getPodMetrics(pod) {
+		await this.metrics.loadSpec().catch(err => {
+			return err;
+		});
+		if (this.metrics.apis['metrics.k8s.io']) {
+			return this.metrics.apis['metrics.k8s.io'].v1beta1
+				.namespaces(pod.metadata.namespace)
+				.pods(pod.metadata.name)
+				.get();
+		} else {
+			return null;
+		}
 	}
 
 	async getPodsInNamespace(namespace) {

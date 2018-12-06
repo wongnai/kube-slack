@@ -5,6 +5,9 @@ kube:
 namespaces_only: KUBE_NAMESPACES_ONLY
 
 interval: TICK_RATE
+metrics_cpu: CPU_METRICS
+metrics_memory: MEMORY_METRICS
+metrics_alert: METRICS_PERCENT
 flood_expire: FLOOD_EXPIRE
 not_ready_min_time: NOT_READY_MIN_TIME
 
