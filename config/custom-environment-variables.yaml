@@ -3,6 +3,7 @@ kube:
   kubeconfig: KUBE_USE_KUBECONFIG
 
 namespaces_only: KUBE_NAMESPACES_ONLY
+recovery_alert: RECOVERY_ALERT
 
 interval: TICK_RATE
 flood_expire: FLOOD_EXPIRE
