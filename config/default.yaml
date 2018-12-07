@@ -14,6 +14,8 @@ kube:
 # if set, this must be an array / list of namespaces to watch
 namespaces_only:
 
+recovery_alert: true
+
 # polling interval
 interval: 15000
 flood_expire: 60000

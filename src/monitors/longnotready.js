@@ -96,7 +96,7 @@ class PodLongNotReady extends EventEmitter {
 	}
 
 	checkRecovery(item, readyStatus) {
-		if (this.alerted[`${item.metadata.namespace}/${item.metadata.name}`]) {
+		if (this.alerted[`${item.metadata.namespace}/${item.metadata.name}`] && config.get('recovery_alert')) {
 			delete this.alerted[`${item.metadata.namespace}/${item.metadata.name}`];
 			this.emit('message', {
 				fallback: `Pod ${item.metadata.namespace}/${

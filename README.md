@@ -113,6 +113,7 @@ Additionally, the following environment variables can be used:
 - `KUBE_NAMESPACES_ONLY`: Monitor a list of specific namespaces, specified either as json array or as a string of comma seperated values (`foo_namespace,bar_namespace`).
 - `SLACK_CHANNEL`: Override channel to send
 - `SLACK_PROXY`: URL of HTTP proxy used to connect to Slack
+- `RECOVERY_ALERT`: Set to `false` to disable alert on pod recovery
 
 ## Annotations
 
