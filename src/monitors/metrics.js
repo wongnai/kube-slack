@@ -75,16 +75,7 @@ class PodMetrics extends EventEmitter {
 
 	checkMetric(type, pod, usage, limit, threshold) {
 		if (config.get(`metrics_${type}`)) {
-			let unit = (() => {
-				switch (type) {
-					case 'memory':
-						return 'Mi';
-					case 'cpu':
-						return ' vCPU';
-					default:
-						return '';
-				}
-			})();
+			let unit = unitMap[type] || '';
 			let parsedUsage = parseKubeMetrics(usage);
 			let parsedLimit = parseKubeMetrics(limit);
 			let percentDifference = parsedUsage / parsedLimit;
@@ -145,5 +136,10 @@ var parseKubeMetrics = metricValue => {
 		return parseInt(metricValue);
 	}
 };
+
+var unitMap = {
+    memory: 'Mi',
+    cpu: ' vCPU'
+}
 
 module.exports = () => new PodMetrics().start();
