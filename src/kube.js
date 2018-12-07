@@ -9,6 +9,8 @@ class Kubernetes {
 	constructor() {
 		this.kube = new Api.Core(this.getConfig());
 		this.metrics = new Api.Client({ config: this.getConfig() });
+		this.metricsEnabled = true;
+		this.metricsLoaded = false;
 
 		let namespaces_only = config.get('namespaces_only');
 		if (namespaces_only) {
@@ -58,15 +60,23 @@ class Kubernetes {
 	}
 
 	async getPodMetrics(pod) {
-		await this.metrics.loadSpec().catch(err => {
-			return err;
-		});
+		if(!this.metricsLoaded) {
+			try {
+				await this.metrics.loadSpec();
+				this.metricsLoaded = true;
+			} catch(e) {
+				this.metricsEnabled = false;
+				return e;
+			}
+		}
+		
 		if (this.metrics.apis['metrics.k8s.io']) {
 			return this.metrics.apis['metrics.k8s.io'].v1beta1
 				.namespaces(pod.metadata.namespace)
 				.pods(pod.metadata.name)
 				.get();
 		} else {
+			this.metricsEnabled = false;
 			return null;
 		}
 	}
