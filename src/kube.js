@@ -60,16 +60,16 @@ class Kubernetes {
 	}
 
 	async getPodMetrics(pod) {
-		if(!this.metricsLoaded) {
+		if (!this.metricsLoaded) {
 			try {
 				await this.metrics.loadSpec();
 				this.metricsLoaded = true;
-			} catch(e) {
+			} catch (e) {
 				this.metricsEnabled = false;
 				return e;
 			}
 		}
-		
+
 		if (this.metrics.apis['metrics.k8s.io']) {
 			return this.metrics.apis['metrics.k8s.io'].v1beta1
 				.namespaces(pod.metadata.namespace)
