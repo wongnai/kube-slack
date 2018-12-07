@@ -25,7 +25,6 @@ class PodMetrics extends EventEmitter {
             return;
         }
         let pods = await kube.getWatchedPods();
-        var self = this;
 
         let percentageAlarm = config.get('metrics_alert')
 					? config.get('metrics_alert') / 100
@@ -57,7 +56,7 @@ class PodMetrics extends EventEmitter {
     
                     Object.keys(podUsage).forEach((metric) => {
                         if(podLimits && podLimits[metric]) {
-                            checkMetric(metric, pod, podUsage[metric], podLimits[metric], percentageAlarm, self)
+                            this.checkMetric(metric, pod, podUsage[metric], podLimits[metric], percentageAlarm)
                         }
                     });
                 }
@@ -67,6 +66,45 @@ class PodMetrics extends EventEmitter {
             
 		}
 	}
+
+    checkMetric (type, pod, usage, limit, threshold) {
+        if(config.get(`metrics_${type}`)) {
+            let parsedUsage = parseKubeMetrics(usage);
+            let parsedLimit = parseKubeMetrics(limit);
+            let percentDifference = parsedUsage / parsedLimit;
+            let podIdentifier = `${pod.metadata.namespace}-${pod.metadata.name}`
+            
+            if(percentDifference > threshold && !this.alerted[`${podIdentifier}-${type}`]) {
+                //Send warning message
+                this.emit('message', {
+                    fallback: `Container ${pod.metadata.namespace}/${
+                        pod.metadata.name
+                    } has high ${type} utilization`,
+                    color: 'danger',
+                    title: `${pod.metadata.namespace}/${pod.metadata.name}`,
+                    text: `Container ${type} usage above ${threshold * 100}% threshold: *${parsedUsage} / ${parsedLimit}*`,
+                    mrkdwn_in: ['text'],
+                    _key: podIdentifier,
+                    ...this.messageProps,
+                });
+                this.alerted[`${podIdentifier}-${type}`] = pod;
+            } else if(percentDifference < threshold && this.alerted[`${podIdentifier}-${type}`]) {
+                //Send recovery message
+                delete this.alerted[`${podIdentifier}-${type}`]
+                this.emit('message', {
+                    fallback: `Container ${pod.metadata.namespace}/${
+                        pod.metadata.name
+                    } has normal ${type} utilization`,
+                    color: 'good',
+                    title: `${pod.metadata.namespace}/${pod.metadata.name}`,
+                    text: `Container ${type} at safe value *${parsedUsage} / ${limit}*`,
+                    mrkdwn_in: ['text'],
+                    _key: podIdentifier + '-recovery',
+                    ...this.messageProps,
+                });
+            }
+        }
+    }
 }
 
 var parseKubeMetrics = (metricValue) => {
@@ -84,45 +122,5 @@ var parseKubeMetrics = (metricValue) => {
         return parseInt(metricValue);
     }
 }
-
-var checkMetric = (type, pod, usage, limit, threshold, self) => {
-    if(config.get(`metrics_${type}`)) {
-        let parsedUsage = parseKubeMetrics(usage);
-        let parsedLimit = parseKubeMetrics(limit);
-        let percentDifference = parsedUsage / parsedLimit;
-        let podIdentifier = `${pod.metadata.namespace}-${pod.metadata.name}`
-        
-        if(percentDifference > threshold && !self.alerted[`${podIdentifier}-${type}`]) {
-            //Send warning message
-            self.emit('message', {
-                fallback: `Container ${pod.metadata.namespace}/${
-                    pod.metadata.name
-                } has high ${type} utilization`,
-                color: 'danger',
-                title: `${pod.metadata.namespace}/${pod.metadata.name}`,
-                text: `Container ${type} usage above ${threshold * 100}% threshold: *${parsedUsage} / ${parsedLimit}*`,
-                mrkdwn_in: ['text'],
-                _key: podIdentifier,
-                ...self.messageProps,
-            });
-            self.alerted[`${podIdentifier}-${type}`] = pod;
-        } else if(percentDifference < threshold && self.alerted[`${podIdentifier}-${type}`]) {
-            //Send recovery message
-            delete self.alerted[`${podIdentifier}-${type}`]
-            self.emit('message', {
-                fallback: `Container ${pod.metadata.namespace}/${
-                    pod.metadata.name
-                } has normal ${type} utilization`,
-                color: 'good',
-                title: `${pod.metadata.namespace}/${pod.metadata.name}`,
-                text: `Container ${type} at safe value *${parsedUsage} / ${limit}*`,
-                mrkdwn_in: ['text'],
-                _key: podIdentifier + '-recovery',
-                ...self.messageProps,
-            });
-        }
-    }
-}
-
 
 module.exports = () => new PodMetrics().start();
