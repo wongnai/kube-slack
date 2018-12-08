@@ -49,12 +49,6 @@ class Kubernetes {
 		return cfg;
 	}
 
-	getMetricsConfig() {
-		let cfg = this.getConfig();
-		cfg.version = 'metrics.k8s.io/v1beta1';
-		return cfg;
-	}
-
 	async getAllPodsInCluster() {
 		return this.kube.pods.get().then(list => list.items);
 	}
