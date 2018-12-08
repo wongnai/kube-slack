@@ -33,7 +33,7 @@ class PodLongNotReady extends EventEmitter {
 				}
 
 				if (annotations['kube-slack/slack-channel']) {
-					messageProps['channel'] = annotations['kube-slack/slack-channel'];
+					this.messageProps['channel'] = annotations['kube-slack/slack-channel'];
 				}
 			}
 
