@@ -6,7 +6,7 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
 
 ## [3.7.0] - 2018-12-08
 ### Added
-- `RECOVERY_ALERT` flag. Set to false to disable pod recovery alert ()
+- `RECOVERY_ALERT` flag. Set to false to disable pod recovery alert
 
 ### Fixed
 - Fixed pod in different namespace mixup (#45) - @blandman
