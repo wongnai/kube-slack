@@ -21,6 +21,11 @@ interval: 15000
 flood_expire: 60000
 not_ready_min_time: 60000
 
+metrics_cpu: true
+metrics_memory: true
+metrics_alert: 80 #percent
+metrics_requests: false # Alert if pods are above requests resources (no limits defined)
+
 # slack_url: 'https://wongnai.slack.com/services/hooks/incoming-webhooks?token=XXXX'
 slack_channel: null
 # slack_proxy: null

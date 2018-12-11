@@ -15,6 +15,11 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
 ### Fixed
 - Fixed pod in different namespace mixup (#45) - @blandman
 
+## [3.6.5] - 2018-12-06
+## Added
+- New monitor for pod metrics (cpu/memory utilization). - @blandman
+- Alerts and recovery messages when metrics go above specified threshold. - @blandman
+
 ## [3.6.0] - 2018-10-18
 ### Added
 - New messages now inform when alerts have recovered for both long ready and not ready pods (#41). - @blandman

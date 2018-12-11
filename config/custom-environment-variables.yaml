@@ -6,6 +6,10 @@ namespaces_only: KUBE_NAMESPACES_ONLY
 recovery_alert: RECOVERY_ALERT
 
 interval: TICK_RATE
+metrics_cpu: METRICS_CPU
+metrics_memory: METRICS_MEMORY
+metrics_alert: METRICS_PERCENT
+metrics_requests: METRICS_REQUESTS
 flood_expire: FLOOD_EXPIRE
 not_ready_min_time: NOT_READY_MIN_TIME
 
