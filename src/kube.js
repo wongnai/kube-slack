@@ -7,7 +7,7 @@ require('core-js/features/array/flat');
 
 class Kubernetes {
 	constructor() {
-		this.kube = new Api.Core(this.getConfig());
+		this.kube = new Api.Client({ config: this.getConfig() });
 		this.metrics = new Api.Client({ config: this.getConfig() });
 		this.metricsEnabled = true;
 		this.metricsLoaded = false;
