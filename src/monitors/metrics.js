@@ -138,8 +138,8 @@ var parseKubeMetrics = metricValue => {
 };
 
 var unitMap = {
-    memory: 'Mi',
-    cpu: ' vCPU'
-}
+	memory: 'Mi',
+	cpu: ' vCPU',
+};
 
 module.exports = () => new PodMetrics().start();

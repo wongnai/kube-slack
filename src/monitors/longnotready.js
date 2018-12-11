@@ -33,7 +33,8 @@ class PodLongNotReady extends EventEmitter {
 				}
 
 				if (annotations['kube-slack/slack-channel']) {
-					this.messageProps['channel'] = annotations['kube-slack/slack-channel'];
+					this.messageProps['channel'] =
+						annotations['kube-slack/slack-channel'];
 				}
 			}
 
@@ -96,7 +97,10 @@ class PodLongNotReady extends EventEmitter {
 	}
 
 	checkRecovery(item, readyStatus) {
-		if (this.alerted[`${item.metadata.namespace}/${item.metadata.name}`] && config.get('recovery_alert')) {
+		if (
+			this.alerted[`${item.metadata.namespace}/${item.metadata.name}`] &&
+			config.get('recovery_alert')
+		) {
 			delete this.alerted[`${item.metadata.namespace}/${item.metadata.name}`];
 			this.emit('message', {
 				fallback: `Pod ${item.metadata.namespace}/${
