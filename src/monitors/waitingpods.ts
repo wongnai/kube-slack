@@ -1,8 +1,12 @@
-const EventEmitter = require('events');
-const config = require('config');
-const kube = require('../kube');
+import * as EventEmitter from 'events';
+import * as config from 'config';
+import kube from '../kube';
+import { NotifyMessage, ContainerStatusWithPod } from '../types';
 
 class PodStatus extends EventEmitter {
+	blacklistReason: string[];
+	alerted: {[key: string]: ContainerStatusWithPod};
+
 	constructor() {
 		super();
 		this.blacklistReason = ['ContainerCreating', 'PodInitializing'];
@@ -21,7 +25,7 @@ class PodStatus extends EventEmitter {
 		let containers = await kube.getContainerStatuses();
 
 		for (let item of containers) {
-			this.messageProps = {};
+			let messageProps: Partial<NotifyMessage> = {};
 			let annotations = item.pod.metadata.annotations;
 			if (annotations) {
 				// Ignore pod if the annotation is set and evaluates to true
@@ -30,7 +34,7 @@ class PodStatus extends EventEmitter {
 				}
 
 				if (annotations['kube-slack/slack-channel']) {
-					this.messageProps['channel'] =
+					messageProps['channel'] =
 						annotations['kube-slack/slack-channel'];
 				}
 			}
@@ -43,14 +47,14 @@ class PodStatus extends EventEmitter {
 			) {
 				key = item.pod.metadata.ownerReferences[0].name;
 			}
-			this.messageProps._key = key;
+			messageProps._key = key;
 
 			if (!item.state.waiting) {
-				this.checkRecovery(item);
+				this.checkRecovery(item, messageProps);
 				continue;
 			}
 			if (this.blacklistReason.includes(item.state.waiting.reason)) {
-				this.checkRecovery(item);
+				this.checkRecovery(item, messageProps);
 				continue;
 			}
 
@@ -68,13 +72,13 @@ class PodStatus extends EventEmitter {
 					item.state.waiting.message
 				}\`\`\``,
 				mrkdwn_in: ['text'],
-				...this.messageProps,
+				...messageProps,
 			});
 			this.alerted[item.name] = item;
 		}
 	}
 
-	checkRecovery(item) {
+	checkRecovery(item: ContainerStatusWithPod, messageProps: Partial<NotifyMessage>) {
 		if (
 			this.alerted[item.name] &&
 			item.ready &&
@@ -93,8 +97,8 @@ class PodStatus extends EventEmitter {
 					item.restartCount
 				} restart${item.restartCount == 1 ? '' : 's'}`,
 				mrkdwn_in: ['text'],
-				...this.messageProps,
-				_key: this.messageProps._key + 'recovery',
+				...messageProps,
+				_key: messageProps._key + 'recovery',
 			});
 		} else if (this.alerted[item.name]) {
 			this.alerted[item.name] = item;
@@ -102,4 +106,4 @@ class PodStatus extends EventEmitter {
 	}
 }
 
-module.exports = () => new PodStatus().start();
+export default () => new PodStatus().start();

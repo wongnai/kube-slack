@@ -1,0 +1,12 @@
+{
+	"compilerOptions": {
+		"alwaysStrict": true,
+		"forceConsistentCasingInFileNames": true,
+		"outDir": "build",
+		"strict": true,
+		"noImplicitAny": false,
+		"module": "CommonJS",
+		"target": "ES2017",
+		"lib": ["es2017"]
+	}
+}

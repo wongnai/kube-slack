@@ -4,17 +4,25 @@
   "description": "",
   "main": "src/index.js",
   "scripts": {
-    "prettier": "prettier \"src/**/*.js\" --write"
+    "prettier": "prettier \"src/**/*.js\" --write",
+    "build": "tsc"
   },
   "dependencies": {
     "bunyan": "^1.8.12",
     "config": "^1.30.0",
-    "core-js": "^3.0.0-beta.3",
     "js-yaml": "^3.11.0",
     "kubernetes-client": "^6.4.1",
+    "lodash": "^4.17.11",
     "node-slack": "0.0.7"
   },
   "devDependencies": {
-    "prettier": "^1.14.2"
+    "@types/bunyan": "^1.8.5",
+    "@types/config": "0.0.34",
+    "@types/lodash": "^4.14.119",
+    "@types/node": "^10.12.12",
+    "@types/node-slack": "0.0.30",
+    "prettier": "^1.14.2",
+    "ts-node": "^7.0.1",
+    "typescript": "^3.2.2"
   }
 }

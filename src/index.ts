@@ -1,24 +1,30 @@
 /* eslint-env node */
 
-const config = require('config');
-const FloodFilter = require('./floodFilter');
-const logger = require('./logger');
+import * as config from "config";
+import FloodFilter from "./floodFilter";
+import logger from "./logger";
+import {Monitor, Notifier, MonitorFactory, NotifyMessage} from './types';
+import monitors from './monitors';
+import notifiers from './notify';
 
 class KubeMonitoring {
+	monitors: Monitor[];
+	floodFilter = new FloodFilter();
+	notifiers: Notifier[];
+
 	constructor() {
-		this.monitors = require('./monitors').map(item => {
+		this.monitors = monitors.map((item: MonitorFactory) => {
 			return item();
 		});
-		this.floodFilter = new FloodFilter();
 		this.floodFilter.expire = config.get('flood_expire');
 
-		this.notifiers = require('./notify').map(Item => {
+		this.notifiers = notifiers.map((Item: Notifier) => {
 			return new Item();
 		});
 	}
 
 	start() {
-		let callback = item => {
+		let callback = (item: NotifyMessage) => {
 			if (!this.floodFilter.isAccepted(item._key)) {
 				return;
 			}

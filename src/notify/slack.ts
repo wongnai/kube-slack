@@ -1,24 +1,27 @@
-const config = require('config');
-const Slack = require('node-slack');
-const logger = require('../logger');
+import * as config from 'config';
+import * as Slack from 'node-slack';
+import logger from '../logger';
+import { NotifyMessage } from '../types';
 
-class SlackNotifier {
+export default class SlackNotifier {
+	slack: Slack | null;
+
 	constructor() {
-		let opts = {};
+		let opts: Partial<Slack.Option> = {};
 
 		if (config.has('slack_proxy')) {
 			opts.proxy = config.get('slack_proxy');
 		}
 
 		try {
-			this.slack = new Slack(config.get('slack_url'), opts);
+			this.slack = new Slack(config.get('slack_url'), opts as Slack.Option);
 		} catch (err) {
 			logger.error({ err }, 'Could not initialize Slack');
 			this.slack = null;
 		}
 	}
 
-	notify(item) {
+	notify(item: NotifyMessage) {
 		if (!this.slack) {
 			return;
 		}
@@ -42,5 +45,3 @@ class SlackNotifier {
 			);
 	}
 }
-
-module.exports = SlackNotifier;

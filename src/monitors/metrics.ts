@@ -1,9 +1,15 @@
-const EventEmitter = require('events');
-const config = require('config');
-const util = require('util');
-const kube = require('../kube');
+import * as EventEmitter from 'events';
+import * as config from 'config';
+import kube from '../kube';
+import { KubernetesPod, NotifyMessage } from '../types';
+
+const UNIT_MAP: {[type: string]: string} = {
+	memory: 'Mi',
+	cpu: ' vCPU',
+};
 
 class PodMetrics extends EventEmitter {
+	alerted: {[key: string]: KubernetesPod}
 	constructor() {
 		super();
 		this.alerted = {};
@@ -27,10 +33,10 @@ class PodMetrics extends EventEmitter {
 		let pods = await kube.getWatchedPods();
 
 		let percentageAlarm = config.get('metrics_alert')
-			? config.get('metrics_alert') / 100
+			? <number>config.get('metrics_alert') / 100
 			: 0.8;
 		for (let pod of pods) {
-			this.messageProps = {};
+			let messageProps: Partial<NotifyMessage> = {};
 			let annotations = pod.metadata.annotations;
 			if (annotations) {
 				// Ignore pod if the annotation is set and evaluates to true
@@ -39,17 +45,17 @@ class PodMetrics extends EventEmitter {
 				}
 
 				if (annotations['kube-slack/slack-channel']) {
-					this.messageProps['channel'] =
+					messageProps['channel'] =
 						annotations['kube-slack/slack-channel'];
 				}
 			}
 			try {
 				let metrics = await kube.getPodMetrics(pod);
-				if (!metrics.body.containers || metrics.body.containers.length == 0) {
+				if (!metrics || !metrics.containers || metrics.containers.length == 0) {
 					continue;
 				}
-				for (let i = 0; i < metrics.body.containers.length; i++) {
-					let podUsage = metrics.body.containers[i].usage;
+				for (let i = 0; i < metrics.containers.length; i++) {
+					let podUsage = metrics.containers[i].usage;
 					let podLimits = pod.spec.containers[i].resources.limits;
 					if (!podLimits && config.get('metrics_requests')) {
 						podLimits = pod.spec.containers[i].resources.requests;
@@ -62,7 +68,8 @@ class PodMetrics extends EventEmitter {
 								pod,
 								podUsage[metric],
 								podLimits[metric],
-								percentageAlarm
+								percentageAlarm,
+								messageProps,
 							);
 						}
 					});
@@ -73,9 +80,9 @@ class PodMetrics extends EventEmitter {
 		}
 	}
 
-	checkMetric(type, pod, usage, limit, threshold) {
+	checkMetric(type: string, pod: KubernetesPod, usage: string, limit: string, threshold: number, messageProps: Partial<NotifyMessage>) {
 		if (config.get(`metrics_${type}`)) {
-			let unit = unitMap[type] || '';
+			let unit = UNIT_MAP[type] || '';
 			let parsedUsage = parseKubeMetrics(usage);
 			let parsedLimit = parseKubeMetrics(limit);
 			let percentDifference = parsedUsage / parsedLimit;
@@ -96,8 +103,8 @@ class PodMetrics extends EventEmitter {
 						100}% threshold: *${parsedUsage} / ${parsedLimit}${unit}*`,
 					mrkdwn_in: ['text'],
 					_key: podIdentifier,
-					...this.messageProps,
-				});
+					...messageProps,
+				} as NotifyMessage);
 				this.alerted[`${podIdentifier}-${type}`] = pod;
 			} else if (
 				percentDifference < threshold &&
@@ -114,14 +121,14 @@ class PodMetrics extends EventEmitter {
 					text: `Container ${type} at safe value *${parsedUsage} / ${parsedLimit}${unit}*`,
 					mrkdwn_in: ['text'],
 					_key: podIdentifier + '-recovery',
-					...this.messageProps,
-				});
+					...messageProps,
+				} as NotifyMessage);
 			}
 		}
 	}
 }
 
-var parseKubeMetrics = metricValue => {
+var parseKubeMetrics = (metricValue: string) => {
 	if (metricValue.includes('m')) {
 		return Math.round(parseInt(metricValue) / 10) / 100;
 	} else if (metricValue.includes('n')) {
@@ -137,9 +144,4 @@ var parseKubeMetrics = metricValue => {
 	}
 };
 
-var unitMap = {
-	memory: 'Mi',
-	cpu: ' vCPU',
-};
-
-module.exports = () => new PodMetrics().start();
+export default () => new PodMetrics().start();

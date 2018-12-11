@@ -4,3 +4,4 @@ Dockerfile
 config/local*.yaml
 test.env
 .vscode
+build/

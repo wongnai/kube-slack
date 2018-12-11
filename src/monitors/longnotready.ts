@@ -1,8 +1,12 @@
-const EventEmitter = require('events');
-const config = require('config');
-const kube = require('../kube');
+import * as EventEmitter from 'events';
+import * as config from 'config';
+import kube from '../kube';
+import { KubernetesTriStateBoolean, KubernetesPod, KubernetesPodCondition, NotifyMessage } from '../types';
 
 class PodLongNotReady extends EventEmitter {
+	minimumTime: number;
+	alerted: {[key: string]: KubernetesPod};
+
 	constructor() {
 		super();
 		this.minimumTime = config.get('not_ready_min_time');
@@ -24,7 +28,7 @@ class PodLongNotReady extends EventEmitter {
 		let pods = await kube.getWatchedPods();
 
 		for (let pod of pods) {
-			this.messageProps = {};
+			let messageProps: Partial<NotifyMessage> = {};
 			let annotations = pod.metadata.annotations;
 			if (annotations) {
 				// Ignore pod if the annotation is set and evaluates to true
@@ -33,7 +37,7 @@ class PodLongNotReady extends EventEmitter {
 				}
 
 				if (annotations['kube-slack/slack-channel']) {
-					this.messageProps['channel'] =
+					messageProps['channel'] =
 						annotations['kube-slack/slack-channel'];
 				}
 			}
@@ -42,28 +46,27 @@ class PodLongNotReady extends EventEmitter {
 				continue;
 			}
 
-			let readyStatus = pod.status.conditions.filter(
+			let readyStatuses = pod.status.conditions.filter(
 				item => item.type === 'Ready'
 			);
 
-			if (readyStatus.length === 0) {
-				this.checkRecovery(pod, readyStatus);
+			if (readyStatuses.length === 0) {
 				continue;
 			}
 
-			readyStatus = readyStatus[0];
+			let readyStatus = readyStatuses[0];
 
-			if (readyStatus.status === 'True') {
-				this.checkRecovery(pod, readyStatus);
+			if (readyStatus.status == KubernetesTriStateBoolean.true) {
+				this.checkRecovery(pod, readyStatus, messageProps);
 				continue;
 			}
 
 			if (readyStatus.reason === 'PodCompleted') {
-				this.checkRecovery(pod, readyStatus);
+				this.checkRecovery(pod, readyStatus, messageProps);
 				continue;
 			}
 
-			let notReadySince = new Date(readyStatus.lastTransitionTime).getTime();
+			let notReadySince = new Date(<string>readyStatus.lastTransitionTime).getTime();
 			let notReadyDuration = new Date().getTime() - notReadySince;
 
 			if (notReadyDuration < this.minimumTime) {
@@ -79,7 +82,7 @@ class PodLongNotReady extends EventEmitter {
 				key = pod.metadata.ownerReferences[0].name;
 			}
 
-			this.messageProps._key = key;
+			messageProps._key = key;
 
 			this.emit('message', {
 				fallback: `Pod ${pod.metadata.namespace}/${
@@ -90,13 +93,13 @@ class PodLongNotReady extends EventEmitter {
 					pod.metadata.name
 				}: ${readyStatus.reason || 'Pod not ready'}`,
 				text: readyStatus.message || 'Pod not ready',
-				...this.messageProps,
-			});
+				...messageProps,
+			} as NotifyMessage);
 			this.alerted[`${pod.metadata.namespace}/${pod.metadata.name}`] = pod;
 		}
 	}
 
-	checkRecovery(item, readyStatus) {
+	checkRecovery(item: KubernetesPod, readyStatus: KubernetesPodCondition, messageProps: Partial<NotifyMessage>) {
 		if (
 			this.alerted[`${item.metadata.namespace}/${item.metadata.name}`] &&
 			config.get('recovery_alert')
@@ -111,11 +114,11 @@ class PodLongNotReady extends EventEmitter {
 					item.metadata.name
 				}: ${readyStatus.reason || 'Pod is ready'}`,
 				text: readyStatus.message || 'Pod is ready',
-				...this.messageProps,
-				_key: this.messageProps._key + 'recovery',
-			});
+				...messageProps,
+				_key: messageProps._key + 'recovery',
+			} as NotifyMessage);
 		}
 	}
 }
 
-module.exports = () => new PodLongNotReady().start();
+export default () => new PodLongNotReady().start();
