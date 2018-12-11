@@ -1,7 +1,6 @@
 const fs = require('fs');
 const config = require('config');
 const Api = require('kubernetes-client');
-const assert = require('assert');
 const logger = require('./logger');
 require('core-js/features/array/flat');
 
@@ -9,8 +8,13 @@ class Kubernetes {
 	constructor() {
 		this.kube = new Api.Client({ config: this.getConfig() });
 		this.metrics = new Api.Client({ config: this.getConfig() });
+		this.ready = Promise.all([
+			this.kube.loadSpec(),
+			this.metrics.loadSpec().catch(() => {
+				this.metricsEnabled = false;
+			}),
+		]);
 		this.metricsEnabled = true;
-		this.metricsLoaded = false;
 
 		let namespaces_only = config.get('namespaces_only');
 		if (namespaces_only) {
@@ -50,20 +54,12 @@ class Kubernetes {
 	}
 
 	async getAllPodsInCluster() {
-		return this.kube.pods.get().then(list => list.items);
+		await this.ready;
+		return this.kube.api.v1.pods.get().then(list => list.items);
 	}
 
 	async getPodMetrics(pod) {
-		if (!this.metricsLoaded) {
-			try {
-				await this.metrics.loadSpec();
-				this.metricsLoaded = true;
-			} catch (e) {
-				this.metricsEnabled = false;
-				return e;
-			}
-		}
-
+		await this.ready;
 		if (this.metrics.apis['metrics.k8s.io']) {
 			return this.metrics.apis['metrics.k8s.io'].v1beta1
 				.namespaces(pod.metadata.namespace)
@@ -77,7 +73,7 @@ class Kubernetes {
 
 	async getPodsInNamespace(namespace) {
 		try {
-			const podsListResult = await this.kube.namespaces(namespace).pods.get();
+			const podsListResult = await this.kube.api.v1.namespaces(namespace).pods.get();
 			return podsListResult.items;
 		} catch (e) {
 			logger.info(
