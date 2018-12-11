@@ -1,15 +1,27 @@
 kube:
-  inCluster: KUBE_USE_CLUSTER
-  kubeconfig: KUBE_USE_KUBECONFIG
+  inCluster:
+    __name: KUBE_USE_CLUSTER
+    __format: json
+  kubeconfig:
+    __name: KUBE_USE_KUBECONFIG
+    __format: json
 
 namespaces_only: KUBE_NAMESPACES_ONLY
-recovery_alert: RECOVERY_ALERT
+recovery_alert:
+  __name: RECOVERY_ALERT
+  __format: json
 
 interval: TICK_RATE
-metrics_cpu: METRICS_CPU
-metrics_memory: METRICS_MEMORY
+metrics_cpu:
+  __name: METRICS_CPU
+  __format: json
+metrics_memory:
+  __name: METRICS_MEMORY
+  __format: json
 metrics_alert: METRICS_PERCENT
-metrics_requests: METRICS_REQUESTS
+metrics_requests:
+  __name: METRICS_REQUESTS
+  __format: json
 flood_expire: FLOOD_EXPIRE
 not_ready_min_time: NOT_READY_MIN_TIME
 

@@ -71,7 +71,7 @@ spec:
      # serviceAccountName: kube-slack
       containers:
       - name: kube-slack
-        image: willwill/kube-slack:v3.7.1
+        image: willwill/kube-slack:v4.0.0
         env:
         - name: SLACK_URL
           value: https://hooks.slack.com/services/T00000000/B00000000/XXXXXXXXXXXXXXXXXXXXXXXX

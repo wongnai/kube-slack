@@ -1,9 +1,9 @@
 /* eslint-env node */
 
-import * as config from "config";
-import FloodFilter from "./floodFilter";
-import logger from "./logger";
-import {Monitor, Notifier, MonitorFactory, NotifyMessage} from './types';
+import * as config from 'config';
+import FloodFilter from './floodFilter';
+import logger from './logger';
+import { Monitor, Notifier, MonitorFactory, NotifyMessage } from './types';
 import monitors from './monitors';
 import notifiers from './notify';
 
@@ -16,7 +16,7 @@ class KubeMonitoring {
 		this.monitors = monitors.map((item: MonitorFactory) => {
 			return item();
 		});
-		this.floodFilter.expire = config.get('flood_expire');
+		this.floodFilter.expire = parseInt(config.get('flood_expire'), 10);
 
 		this.notifiers = notifiers.map((Item: Notifier) => {
 			return new Item();

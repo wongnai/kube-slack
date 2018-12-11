@@ -1,22 +1,27 @@
 import * as EventEmitter from 'events';
 import * as config from 'config';
 import kube from '../kube';
-import { KubernetesTriStateBoolean, KubernetesPod, KubernetesPodCondition, NotifyMessage } from '../types';
+import {
+	KubernetesTriStateBoolean,
+	KubernetesPod,
+	KubernetesPodCondition,
+	NotifyMessage,
+} from '../types';
 
 class PodLongNotReady extends EventEmitter {
 	minimumTime: number;
-	alerted: {[key: string]: KubernetesPod};
+	alerted: { [key: string]: KubernetesPod };
 
 	constructor() {
 		super();
-		this.minimumTime = config.get('not_ready_min_time');
+		this.minimumTime = parseInt(config.get('not_ready_min_time'), 10);
 		this.alerted = {};
 	}
 
 	start() {
 		setInterval(() => {
 			this.check();
-		}, config.get('interval'));
+		}, parseInt(config.get('interval'), 10));
 
 		// run an initial check right after the start instead of waiting for first interval to kick in.
 		this.check();
@@ -37,8 +42,7 @@ class PodLongNotReady extends EventEmitter {
 				}
 
 				if (annotations['kube-slack/slack-channel']) {
-					messageProps['channel'] =
-						annotations['kube-slack/slack-channel'];
+					messageProps['channel'] = annotations['kube-slack/slack-channel'];
 				}
 			}
 
@@ -66,7 +70,9 @@ class PodLongNotReady extends EventEmitter {
 				continue;
 			}
 
-			let notReadySince = new Date(<string>readyStatus.lastTransitionTime).getTime();
+			let notReadySince = new Date(<string>(
+				readyStatus.lastTransitionTime
+			)).getTime();
 			let notReadyDuration = new Date().getTime() - notReadySince;
 
 			if (notReadyDuration < this.minimumTime) {
@@ -99,7 +105,11 @@ class PodLongNotReady extends EventEmitter {
 		}
 	}
 
-	checkRecovery(item: KubernetesPod, readyStatus: KubernetesPodCondition, messageProps: Partial<NotifyMessage>) {
+	checkRecovery(
+		item: KubernetesPod,
+		readyStatus: KubernetesPodCondition,
+		messageProps: Partial<NotifyMessage>
+	) {
 		if (
 			this.alerted[`${item.metadata.namespace}/${item.metadata.name}`] &&
 			config.get('recovery_alert')

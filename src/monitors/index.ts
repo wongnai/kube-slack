@@ -1,4 +1,4 @@
-import { MonitorFactory } from "../types";
+import { MonitorFactory } from '../types';
 
 export default [
 	require('./waitingpods').default,

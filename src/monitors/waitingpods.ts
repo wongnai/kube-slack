@@ -5,7 +5,7 @@ import { NotifyMessage, ContainerStatusWithPod } from '../types';
 
 class PodStatus extends EventEmitter {
 	blacklistReason: string[];
-	alerted: {[key: string]: ContainerStatusWithPod};
+	alerted: { [key: string]: ContainerStatusWithPod };
 
 	constructor() {
 		super();
@@ -16,7 +16,7 @@ class PodStatus extends EventEmitter {
 	start() {
 		setInterval(() => {
 			this.check();
-		}, config.get('interval'));
+		}, parseInt(config.get('interval'), 10));
 
 		return this;
 	}
@@ -34,8 +34,7 @@ class PodStatus extends EventEmitter {
 				}
 
 				if (annotations['kube-slack/slack-channel']) {
-					messageProps['channel'] =
-						annotations['kube-slack/slack-channel'];
+					messageProps['channel'] = annotations['kube-slack/slack-channel'];
 				}
 			}
 
@@ -78,7 +77,10 @@ class PodStatus extends EventEmitter {
 		}
 	}
 
-	checkRecovery(item: ContainerStatusWithPod, messageProps: Partial<NotifyMessage>) {
+	checkRecovery(
+		item: ContainerStatusWithPod,
+		messageProps: Partial<NotifyMessage>
+	) {
 		if (
 			this.alerted[item.name] &&
 			item.ready &&

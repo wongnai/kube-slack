@@ -4,7 +4,7 @@
   "description": "",
   "main": "src/index.js",
   "scripts": {
-    "prettier": "prettier \"src/**/*.js\" --write",
+    "prettier": "prettier \"src/**/*.js\" \"src/**/*.ts\" --write",
     "build": "tsc"
   },
   "dependencies": {

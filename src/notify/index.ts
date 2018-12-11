@@ -1,3 +1,3 @@
-import { Notifier } from "../types";
+import { Notifier } from '../types';
 
 export default [require('./slack').default] as Notifier[];

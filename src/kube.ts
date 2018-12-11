@@ -2,8 +2,14 @@ import * as fs from 'fs';
 import * as config from 'config';
 import * as Api from 'kubernetes-client';
 import logger from './logger';
-import { ConfigKube, KubernetesPod, KubernetesList, ContainerStatusWithPod, KubernetesPodMetrics } from './types';
-import {flatten} from 'lodash';
+import {
+	ConfigKube,
+	KubernetesPod,
+	KubernetesList,
+	ContainerStatusWithPod,
+	KubernetesPodMetrics,
+} from './types';
+import { flatten } from 'lodash';
 
 export class Kubernetes {
 	kube: Api.Api;
@@ -17,7 +23,7 @@ export class Kubernetes {
 		this.genericClient = new (Api as any).Client({ config: this.getConfig() });
 		this.ready = Promise.all([
 			this.kube.loadSpec(),
-			this.genericClient.loadSpec().catch(() => this.metricsEnabled = false),
+			this.genericClient.loadSpec().catch(() => (this.metricsEnabled = false)),
 		]);
 		this.metricsEnabled = true;
 
@@ -65,13 +71,15 @@ export class Kubernetes {
 		});
 	}
 
-	async getPodMetrics(pod: KubernetesPod): Promise<KubernetesPodMetrics|null> {
-		if(!this.metricsEnabled){
+	async getPodMetrics(
+		pod: KubernetesPod
+	): Promise<KubernetesPodMetrics | null> {
+		if (!this.metricsEnabled) {
 			return null;
 		}
-		
+
 		await this.ready;
-		
+
 		if (this.genericClient.apis['metrics.k8s.io']) {
 			let out = await this.genericClient.apis['metrics.k8s.io'].v1beta1
 				.namespaces(pod.metadata.namespace)
@@ -79,7 +87,7 @@ export class Kubernetes {
 				.get();
 			return out.body;
 		} else {
-			logger.warn("metrics.k8s.io not supported");
+			logger.warn('metrics.k8s.io not supported');
 			this.metricsEnabled = false;
 			return null;
 		}
@@ -87,7 +95,9 @@ export class Kubernetes {
 
 	async getPodsInNamespace(namespace: string): Promise<KubernetesPod> {
 		try {
-			const podsListResult = await this.kube.api.v1.namespaces(namespace).pods.get();
+			const podsListResult = await this.kube.api.v1
+				.namespaces(namespace)
+				.pods.get();
 			return podsListResult.body.items;
 		} catch (e) {
 			logger.info(
@@ -107,9 +117,9 @@ export class Kubernetes {
 			)
 		);
 
-		return flatten(
-			arrOfArrOfPods.filter(podArrOrError => !(podArrOrError instanceof Error)) as KubernetesPod[][]
-		); // filter out error from namespaces which failed get watched, the error has been already logged. TODO: notify on slack when a namespace could not be watched successfully.;
+		return flatten(arrOfArrOfPods.filter(
+			podArrOrError => !(podArrOrError instanceof Error)
+		) as KubernetesPod[][]); // filter out error from namespaces which failed get watched, the error has been already logged. TODO: notify on slack when a namespace could not be watched successfully.;
 	}
 
 	getWatchedPods() {

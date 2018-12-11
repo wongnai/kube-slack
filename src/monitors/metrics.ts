@@ -3,13 +3,13 @@ import * as config from 'config';
 import kube from '../kube';
 import { KubernetesPod, NotifyMessage } from '../types';
 
-const UNIT_MAP: {[type: string]: string} = {
+const UNIT_MAP: { [type: string]: string } = {
 	memory: 'Mi',
 	cpu: ' vCPU',
 };
 
 class PodMetrics extends EventEmitter {
-	alerted: {[key: string]: KubernetesPod}
+	alerted: { [key: string]: KubernetesPod };
 	constructor() {
 		super();
 		this.alerted = {};
@@ -21,7 +21,7 @@ class PodMetrics extends EventEmitter {
 
 		setInterval(() => {
 			this.check();
-		}, config.get('interval'));
+		}, parseInt(config.get('interval'), 10));
 
 		return this;
 	}
@@ -33,7 +33,7 @@ class PodMetrics extends EventEmitter {
 		let pods = await kube.getWatchedPods();
 
 		let percentageAlarm = config.get('metrics_alert')
-			? <number>config.get('metrics_alert') / 100
+			? parseInt(config.get('metrics_alert'), 10) / 100
 			: 0.8;
 		for (let pod of pods) {
 			let messageProps: Partial<NotifyMessage> = {};
@@ -45,8 +45,7 @@ class PodMetrics extends EventEmitter {
 				}
 
 				if (annotations['kube-slack/slack-channel']) {
-					messageProps['channel'] =
-						annotations['kube-slack/slack-channel'];
+					messageProps['channel'] = annotations['kube-slack/slack-channel'];
 				}
 			}
 			try {
@@ -69,7 +68,7 @@ class PodMetrics extends EventEmitter {
 								podUsage[metric],
 								podLimits[metric],
 								percentageAlarm,
-								messageProps,
+								messageProps
 							);
 						}
 					});
@@ -80,50 +79,58 @@ class PodMetrics extends EventEmitter {
 		}
 	}
 
-	checkMetric(type: string, pod: KubernetesPod, usage: string, limit: string, threshold: number, messageProps: Partial<NotifyMessage>) {
-		if (config.get(`metrics_${type}`)) {
-			let unit = UNIT_MAP[type] || '';
-			let parsedUsage = parseKubeMetrics(usage);
-			let parsedLimit = parseKubeMetrics(limit);
-			let percentDifference = parsedUsage / parsedLimit;
-			let podIdentifier = `${pod.metadata.namespace}-${pod.metadata.name}`;
+	checkMetric(
+		type: string,
+		pod: KubernetesPod,
+		usage: string,
+		limit: string,
+		threshold: number,
+		messageProps: Partial<NotifyMessage>
+	) {
+		if (!config.get(`metrics_${type}`)) {
+			return;
+		}
+		let unit = UNIT_MAP[type] || '';
+		let parsedUsage = parseKubeMetrics(usage);
+		let parsedLimit = parseKubeMetrics(limit);
+		let percentDifference = parsedUsage / parsedLimit;
+		let podIdentifier = `${pod.metadata.namespace}-${pod.metadata.name}`;
 
-			if (
-				percentDifference > threshold &&
-				!this.alerted[`${podIdentifier}-${type}`]
-			) {
-				//Send warning message
-				this.emit('message', {
-					fallback: `Container ${pod.metadata.namespace}/${
-						pod.metadata.name
-					} has high ${type} utilization`,
-					color: 'danger',
-					title: `${pod.metadata.namespace}/${pod.metadata.name}`,
-					text: `Container ${type} usage above ${threshold *
-						100}% threshold: *${parsedUsage} / ${parsedLimit}${unit}*`,
-					mrkdwn_in: ['text'],
-					_key: podIdentifier,
-					...messageProps,
-				} as NotifyMessage);
-				this.alerted[`${podIdentifier}-${type}`] = pod;
-			} else if (
-				percentDifference < threshold &&
-				this.alerted[`${podIdentifier}-${type}`]
-			) {
-				//Send recovery message
-				delete this.alerted[`${podIdentifier}-${type}`];
-				this.emit('message', {
-					fallback: `Container ${pod.metadata.namespace}/${
-						pod.metadata.name
-					} has normal ${type} utilization`,
-					color: 'good',
-					title: `${pod.metadata.namespace}/${pod.metadata.name}`,
-					text: `Container ${type} at safe value *${parsedUsage} / ${parsedLimit}${unit}*`,
-					mrkdwn_in: ['text'],
-					_key: podIdentifier + '-recovery',
-					...messageProps,
-				} as NotifyMessage);
-			}
+		if (
+			percentDifference > threshold &&
+			!this.alerted[`${podIdentifier}-${type}`]
+		) {
+			// Send warning message
+			this.emit('message', {
+				fallback: `Container ${pod.metadata.namespace}/${
+					pod.metadata.name
+				} has high ${type} utilization`,
+				color: 'danger',
+				title: `${pod.metadata.namespace}/${pod.metadata.name}`,
+				text: `Container ${type} usage above ${threshold *
+					100}% threshold: *${parsedUsage} / ${parsedLimit}${unit}*`,
+				mrkdwn_in: ['text'],
+				_key: podIdentifier,
+				...messageProps,
+			} as NotifyMessage);
+			this.alerted[`${podIdentifier}-${type}`] = pod;
+		} else if (
+			percentDifference < threshold &&
+			this.alerted[`${podIdentifier}-${type}`]
+		) {
+			// Send recovery message
+			delete this.alerted[`${podIdentifier}-${type}`];
+			this.emit('message', {
+				fallback: `Container ${pod.metadata.namespace}/${
+					pod.metadata.name
+				} has normal ${type} utilization`,
+				color: 'good',
+				title: `${pod.metadata.namespace}/${pod.metadata.name}`,
+				text: `Container ${type} at safe value *${parsedUsage} / ${parsedLimit}${unit}*`,
+				mrkdwn_in: ['text'],
+				_key: podIdentifier + '-recovery',
+				...messageProps,
+			} as NotifyMessage);
 		}
 	}
 }
