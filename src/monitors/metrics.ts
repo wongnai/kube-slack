@@ -116,7 +116,8 @@ class PodMetrics extends EventEmitter {
 			this.alerted[`${podIdentifier}-${type}`] = pod;
 		} else if (
 			percentDifference < threshold &&
-			this.alerted[`${podIdentifier}-${type}`]
+			this.alerted[`${podIdentifier}-${type}`] &&
+			config.get('recovery_alert')
 		) {
 			// Send recovery message
 			delete this.alerted[`${podIdentifier}-${type}`];

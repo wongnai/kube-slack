@@ -48,11 +48,7 @@ class PodStatus extends EventEmitter {
 			}
 			messageProps._key = key;
 
-			if (!item.state.waiting) {
-				this.checkRecovery(item, messageProps);
-				continue;
-			}
-			if (this.blacklistReason.includes(item.state.waiting.reason)) {
+			if (!item.state.waiting || this.blacklistReason.includes(item.state.waiting.reason)) {
 				this.checkRecovery(item, messageProps);
 				continue;
 			}
@@ -84,7 +80,8 @@ class PodStatus extends EventEmitter {
 		if (
 			this.alerted[item.name] &&
 			item.ready &&
-			this.alerted[item.name].restartCount == item.restartCount
+			this.alerted[item.name].restartCount == item.restartCount && 
+			config.get('recovery_alert')
 		) {
 			delete this.alerted[item.name];
 			this.emit('message', {
