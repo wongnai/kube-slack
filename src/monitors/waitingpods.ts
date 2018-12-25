@@ -38,7 +38,7 @@ class PodStatus extends EventEmitter {
 				}
 			}
 
-			let key = item.pod.metadata.name;
+			let key = item.pod.metadata.namespace + '/' + item.pod.metadata.name;
 
 			if (
 				item.pod.metadata.ownerReferences &&
@@ -69,7 +69,7 @@ class PodStatus extends EventEmitter {
 				mrkdwn_in: ['text'],
 				...messageProps,
 			});
-			this.alerted[item.name] = item;
+			this.alerted[messageProps._key] = item;
 		}
 	}
 
@@ -77,13 +77,14 @@ class PodStatus extends EventEmitter {
 		item: ContainerStatusWithPod,
 		messageProps: Partial<NotifyMessage>
 	) {
+		let key = messageProps._key as string;
 		if (
-			this.alerted[item.name] &&
+			this.alerted[key] &&
 			item.ready &&
-			this.alerted[item.name].restartCount == item.restartCount && 
+			this.alerted[key].restartCount == item.restartCount && 
 			config.get('recovery_alert')
 		) {
-			delete this.alerted[item.name];
+			delete this.alerted[key];
 			this.emit('message', {
 				fallback: `Container ${item.pod.metadata.namespace}/${
 					item.pod.metadata.name
@@ -97,10 +98,10 @@ class PodStatus extends EventEmitter {
 				} restart${item.restartCount == 1 ? '' : 's'}`,
 				mrkdwn_in: ['text'],
 				...messageProps,
-				_key: messageProps._key + 'recovery',
+				_key: key + 'recovery',
 			});
-		} else if (this.alerted[item.name]) {
-			this.alerted[item.name] = item;
+		} else if (this.alerted[key]) {
+			this.alerted[key] = item;
 		}
 	}
 }

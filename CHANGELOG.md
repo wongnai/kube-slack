@@ -4,6 +4,10 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](http://keepachangelog.com/en/1.0.0/)
 and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.html).
 
+## [Unreleased]
+### Fixed
+- Repeated recovered pod alert when pod with the same container name exist across namespace
+
 ## [4.0.0] - 2018-12-11
 ## Added
 - New monitor for pod metrics (cpu/memory utilization). - @blandman
