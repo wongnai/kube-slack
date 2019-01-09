@@ -34,7 +34,7 @@ class PodStatus extends EventEmitter {
 				}
 
 				if (annotations['kube-slack/slack-channel']) {
-					messageProps['channel'] = annotations['kube-slack/slack-channel'];
+					messageProps.channel = annotations['kube-slack/slack-channel'];
 				}
 			}
 
@@ -81,7 +81,7 @@ class PodStatus extends EventEmitter {
 		if (
 			this.alerted[key] &&
 			item.ready &&
-			this.alerted[key].restartCount == item.restartCount && 
+			this.alerted[key].restartCount === item.restartCount && 
 			config.get('recovery_alert')
 		) {
 			delete this.alerted[key];
@@ -95,7 +95,7 @@ class PodStatus extends EventEmitter {
 				}`,
 				text: `Container entered status *${item.pod.status.phase}*\n${
 					item.restartCount
-				} restart${item.restartCount == 1 ? '' : 's'}`,
+				} restart${item.restartCount === 1 ? '' : 's'}`,
 				mrkdwn_in: ['text'],
 				...messageProps,
 				_key: key + 'recovery',

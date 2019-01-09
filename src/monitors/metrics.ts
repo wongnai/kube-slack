@@ -45,12 +45,12 @@ class PodMetrics extends EventEmitter {
 				}
 
 				if (annotations['kube-slack/slack-channel']) {
-					messageProps['channel'] = annotations['kube-slack/slack-channel'];
+					messageProps.channel = annotations['kube-slack/slack-channel'];
 				}
 			}
 			try {
 				let metrics = await kube.getPodMetrics(pod);
-				if (!metrics || !metrics.containers || metrics.containers.length == 0) {
+				if (!metrics || !metrics.containers || metrics.containers.length === 0) {
 					continue;
 				}
 				for (let i = 0; i < metrics.containers.length; i++) {
@@ -136,19 +136,19 @@ class PodMetrics extends EventEmitter {
 	}
 }
 
-var parseKubeMetrics = (metricValue: string) => {
+const parseKubeMetrics = (metricValue: string) => {
 	if (metricValue.includes('m')) {
-		return Math.round(parseInt(metricValue) / 10) / 100;
+		return Math.round(parseInt(metricValue, 10) / 10) / 100;
 	} else if (metricValue.includes('n')) {
-		return Math.round(parseInt(metricValue) / 10000000) / 100;
+		return Math.round(parseInt(metricValue, 10) / 10000000) / 100;
 	} else if (metricValue.includes('Gi')) {
-		return parseInt(metricValue) * 1024;
+		return parseInt(metricValue, 10) * 1024;
 	} else if (metricValue.includes('Mi')) {
-		return parseInt(metricValue);
+		return parseInt(metricValue, 10);
 	} else if (metricValue.includes('Ki')) {
-		return Math.round((parseInt(metricValue) / 1024) * 100) / 100;
+		return Math.round((parseInt(metricValue, 10) / 1024) * 100) / 100;
 	} else {
-		return parseInt(metricValue);
+		return parseInt(metricValue, 10);
 	}
 };
 

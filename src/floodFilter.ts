@@ -1,6 +1,6 @@
 export default class FloodFilter {
-	private store: { [key: string]: number };
 	expire: number;
+	private store: { [key: string]: number };
 
 	constructor() {
 		this.store = {};

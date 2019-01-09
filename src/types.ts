@@ -77,18 +77,18 @@ export interface KubernetesContainerStatus {
 export interface KubernetesContainer {
 	args: string[];
 	command: string[];
-	env: { name: string; value?: string; valueFrom?: object }[];
+	env: Array<{ name: string; value?: string; valueFrom?: object }>;
 	envFrom: object;
 	image: string;
 	imagePullPolicy: string;
 	name: string;
-	ports: {
+	ports: Array<{
 		containerPort: number;
 		hostIP?: string;
 		hostPort?: number;
 		name?: string;
 		protocol: string;
-	}[];
+	}>;
 	resources: {
 		limits: { [type: string]: string };
 		requests: { [type: string]: string };
@@ -101,14 +101,14 @@ export interface KubernetesPod extends KubernetesObject {
 		labels: { [key: string]: string };
 		uid: string;
 		resourceVersion: string;
-		ownerReferences: {
+		ownerReferences: Array<{
 			apiVersion: string;
 			blockOwnerDeletion: boolean;
 			controller: boolean;
 			kind: string;
 			name: string;
 			uid: string;
-		}[];
+		}>;
 	};
 	spec: {
 		containers: KubernetesContainer[];
@@ -130,13 +130,13 @@ export type ContainerStatusWithPod = KubernetesContainerStatus & {
 export interface KubernetesPodMetrics extends KubernetesObject {
 	timestamp: string;
 	window: string;
-	containers: {
+	containers: Array<{
 		name: string;
 		usage: { [type: string]: string };
-	}[];
+	}>;
 }
 
-export interface Monitor extends EventEmitter {}
+export interface Monitor extends EventEmitter {} // tslint:disable-line
 
 export type MonitorFactory = () => Monitor;
 
@@ -154,25 +154,24 @@ export interface NotifyMessage {
 	};
 	title?: string;
 	title_link?: string;
-	fields?: {
+	fields?: Array<{
 		title: string;
 		value: string;
 		short?: boolean;
-	}[];
+	}>;
 	image_url?: string;
 	thumb_url?: string;
 	footer?: string;
 	footer_icon?: string;
 	ts?: number;
-	actions?: {
+	actions?: Array<{
 		type: string;
 		text: string;
 		url: string;
 		style?: string;
-	}[];
+	}>;
 }
 
 export interface Notifier {
-	new (): Notifier;
 	notify(message: NotifyMessage): Promise<any>;
 }

@@ -1,12 +1,24 @@
 {
-	"compilerOptions": {
-		"alwaysStrict": true,
-		"forceConsistentCasingInFileNames": true,
-		"outDir": "build",
-		"strict": true,
-		"noImplicitAny": false,
-		"module": "CommonJS",
-		"target": "ES2017",
-		"lib": ["es2017"]
-	}
+  "compilerOptions": {
+    "baseUrl": "src",
+    "outDir": "build",
+    "module": "commonjs",
+    "target": "es2017",
+    "lib": ["es6", "es7"],
+    "sourceMap": true,
+    "moduleResolution": "node",
+    "rootDir": "src",
+    "forceConsistentCasingInFileNames": true,
+    "strict": true,
+    "suppressImplicitAnyIndexErrors": true,
+    "noUnusedLocals": true,
+    "typeRoots": [
+      "types",
+      "node_modules/@types"
+    ]
+  },
+  "exclude": [
+    "node_modules",
+    "build"
+  ]
 }

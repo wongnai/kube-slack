@@ -1,0 +1,29 @@
+{
+  "extends": ["tslint:recommended", "tslint-config-prettier"],
+  "linterOptions": {
+    "exclude": [
+      "**/*.js",
+      "node_modules/**/*.ts"
+    ]
+  },
+  "rules": {
+    "prefer-const": false,
+    "no-console": false,
+    "object-literal-sort-keys": false,
+    "ordered-imports": false,
+    "interface-name": false,
+    "no-var-requires": false,
+    "jsx-no-lambda": false,
+    "member-access": false,
+    "only-arrow-function": false,
+    "no-unnecessary-type-assertion": true,
+    "function-constructor": true,
+    "no-empty": [true, "allow-empty-catch", "allow-empty-functions"],
+    "no-implicit-dependencies": [true, "dev"],
+    "no-return-await": true,
+    "no-sparse-arrays": true,
+    "no-angle-bracket-type-assertion": false,
+    "no-redundant-jsdoc": true,
+    "prefer-method-signature": true
+  }
+}

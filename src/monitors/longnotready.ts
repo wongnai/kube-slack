@@ -42,7 +42,7 @@ class PodLongNotReady extends EventEmitter {
 				}
 
 				if (annotations['kube-slack/slack-channel']) {
-					messageProps['channel'] = annotations['kube-slack/slack-channel'];
+					messageProps.channel = annotations['kube-slack/slack-channel'];
 				}
 			}
 
@@ -60,7 +60,7 @@ class PodLongNotReady extends EventEmitter {
 
 			let readyStatus = readyStatuses[0];
 
-			if (readyStatus.status == KubernetesTriStateBoolean.true) {
+			if (readyStatus.status === KubernetesTriStateBoolean.true) {
 				this.checkRecovery(pod, readyStatus, messageProps);
 				continue;
 			}

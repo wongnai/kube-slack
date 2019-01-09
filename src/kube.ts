@@ -27,12 +27,12 @@ export class Kubernetes {
 		]);
 		this.metricsEnabled = true;
 
-		let namespacesOnly = config.get('namespaces_only') as string[] | string;
+		let namespacesOnly: string|string[] = config.get('namespaces_only');
 		if (namespacesOnly) {
 			if (!Array.isArray(namespacesOnly)) {
 				namespacesOnly = namespacesOnly
 					.split(',')
-					.map(namespace => namespace.trim()) as string[];
+					.map(namespace => namespace.trim());
 			}
 			logger.info(
 				`Watching pods the following namespaces: ${namespacesOnly.join(',')} .`
@@ -46,7 +46,7 @@ export class Kubernetes {
 	}
 
 	getConfig() {
-		let cfg = config.get('kube') as ConfigKube;
+		let cfg: ConfigKube = config.get('kube');
 		if (cfg.kubeconfig) {
 			return Api.config.fromKubeconfig();
 		} else if (cfg.inCluster) {
@@ -109,19 +109,6 @@ export class Kubernetes {
 		}
 	}
 
-	protected async getPodsInWatchedNamespaces() {
-		let namespacesOnly = this.namespacesOnly as string[];
-		const arrOfArrOfPods: Array<KubernetesPod[] | Error> = await Promise.all(
-			namespacesOnly.map(
-				namespace => this.getPodsInNamespace(namespace).catch(e => e) // catch errors and simply return the Error object - we don't want the whole watch cycle to stop just because one of the namespaces couldn't watched.
-			)
-		);
-
-		return flatten(arrOfArrOfPods.filter(
-			podArrOrError => !(podArrOrError instanceof Error)
-		) as KubernetesPod[][]); // filter out error from namespaces which failed get watched, the error has been already logged. TODO: notify on slack when a namespace could not be watched successfully.;
-	}
-
 	getWatchedPods() {
 		return this.namespacesOnly
 			? this.getPodsInWatchedNamespaces()
@@ -141,6 +128,19 @@ export class Kubernetes {
 			}
 		}
 		return out;
+	}
+
+	protected async getPodsInWatchedNamespaces() {
+		let namespacesOnly = this.namespacesOnly as string[];
+		const arrOfArrOfPods: Array<KubernetesPod[] | Error> = await Promise.all(
+			namespacesOnly.map(
+				namespace => this.getPodsInNamespace(namespace).catch(e => e) // catch errors and simply return the Error object - we don't want the whole watch cycle to stop just because one of the namespaces couldn't watched.
+			)
+		);
+
+		return flatten(arrOfArrOfPods.filter(
+			podArrOrError => !(podArrOrError instanceof Error)
+		) as KubernetesPod[][]); // filter out error from namespaces which failed get watched, the error has been already logged. TODO: notify on slack when a namespace could not be watched successfully.;
 	}
 }
 
