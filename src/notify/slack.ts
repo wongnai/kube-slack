@@ -39,7 +39,7 @@ export default class SlackNotifier {
 				() => {
 					logger.info('Slack message sent');
 				},
-				err => {
+				(err: any) => {
 					logger.error({ err }, 'Could not send notification to Slack');
 				}
 			);

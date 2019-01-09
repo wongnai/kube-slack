@@ -24,6 +24,7 @@
     "no-sparse-arrays": true,
     "no-angle-bracket-type-assertion": false,
     "no-redundant-jsdoc": true,
-    "prefer-method-signature": true
+    "prefer-method-signature": true,
+    "no-misused-new": false
   }
 }

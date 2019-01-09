@@ -17,6 +17,10 @@ export interface KubernetesObject {
 	};
 }
 
+export interface KubernetesResponse<T> {
+	body: T
+}
+
 export interface KubernetesList<T> extends KubernetesObject {
 	items: T[];
 }
@@ -173,5 +177,6 @@ export interface NotifyMessage {
 }
 
 export interface Notifier {
+	new(): Notifier
 	notify(message: NotifyMessage): Promise<any>;
 }

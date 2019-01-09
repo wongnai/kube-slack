@@ -8,6 +8,7 @@ import {
 	KubernetesList,
 	ContainerStatusWithPod,
 	KubernetesPodMetrics,
+	KubernetesResponse,
 } from './types';
 import { flatten } from 'lodash';
 
@@ -66,7 +67,7 @@ export class Kubernetes {
 
 	async getAllPodsInCluster(): Promise<KubernetesPod[]> {
 		await this.ready;
-		return this.kube.api.v1.pods.get().then(list => {
+		return this.kube.api.v1.pods.get().then((list: KubernetesResponse<KubernetesList<KubernetesPod>>) => {
 			return list.body.items;
 		});
 	}
