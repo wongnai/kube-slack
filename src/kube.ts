@@ -13,8 +13,8 @@ import {
 import { flatten } from 'lodash';
 
 export class Kubernetes {
-	kube: Api.Api;
-	genericClient: Api.Api;
+	kube: Api.ApiRoot;
+	genericClient: Api.ApiRoot;
 	ready: Promise<any>;
 	metricsEnabled: boolean;
 	protected namespacesOnly: string[] | null = null;
@@ -23,8 +23,8 @@ export class Kubernetes {
 		this.kube = new Api.Client1_10({ config: this.getConfig() });
 		this.genericClient = new (Api as any).Client({ config: this.getConfig() });
 		this.ready = Promise.all([
-			this.kube.loadSpec(),
-			this.genericClient.loadSpec().catch(() => (this.metricsEnabled = false)),
+			(this.kube as any).loadSpec(),
+			(this.genericClient as any).loadSpec().catch(() => (this.metricsEnabled = false)),
 		]);
 		this.metricsEnabled = true;
 
