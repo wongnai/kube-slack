@@ -115,6 +115,17 @@ class PodLongNotReady extends EventEmitter {
 			config.get('recovery_alert')
 		) {
 			delete this.alerted[`${item.metadata.namespace}/${item.metadata.name}`];
+			let annotations = pod.metadata.annotations;
+			if (annotations) {
+				// Ignore pod if the annotation is set and evaluates to true
+				if (annotations['kube-slack/ignore-pod']) {
+					continue;
+				}
+
+				if (annotations['kube-slack/slack-channel']) {
+					messageProps.channel = annotations['kube-slack/slack-channel'];
+				}
+			}
 			this.emit('message', {
 				fallback: `Pod ${item.metadata.namespace}/${
 					item.metadata.name
