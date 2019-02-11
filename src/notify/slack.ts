@@ -16,7 +16,7 @@ export default class SlackNotifier {
 		try {
 			this.slack = new Slack(config.get('slack_url'), opts as Slack.Option);
 		} catch (err) {
-			logger.error({ err }, 'Could not initialize Slack');
+			logger.error('Could not initialize Slack', err);
 			this.slack = null;
 		}
 	}
@@ -40,7 +40,7 @@ export default class SlackNotifier {
 					logger.info('Slack message sent');
 				},
 				(err: any) => {
-					logger.error({ err }, 'Could not send notification to Slack');
+					logger.error('Could not send notification to Slack', err);
 				}
 			);
 	}

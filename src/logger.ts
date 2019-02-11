@@ -1,6 +1,6 @@
-import * as bunyan from 'bunyan';
+import * as winston from 'winston';
 
-export default bunyan.createLogger({
-	name: 'kube-slack',
-	serializers: bunyan.stdSerializers,
+export default winston.createLogger({
+	transports: [new winston.transports.Console()],
+	format: winston.format.cli(),
 });

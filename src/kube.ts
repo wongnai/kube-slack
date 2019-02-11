@@ -102,8 +102,8 @@ export class Kubernetes {
 			return podsListResult.body.items;
 		} catch (e) {
 			logger.info(
-				e,
-				`Error while attempting to retrieve pods in namespace: ${namespace}. Does the namespace exist and did you set the correct permissions?`
+				`Error while attempting to retrieve pods in namespace: ${namespace}. Does the namespace exist and did you set the correct permissions?`,
+				e
 			);
 
 			throw e;

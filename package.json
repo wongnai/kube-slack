@@ -9,19 +9,19 @@
     "tslint": "tslint -c tslint.json -p tsconfig.json"
   },
   "dependencies": {
-    "bunyan": "^1.8.12",
     "config": "^3.0.1",
     "js-yaml": "^3.12.1",
     "kubernetes-client": "^6.8.3",
     "lodash": "^4.17.11",
-    "node-slack": "0.0.7"
+    "node-slack": "0.0.7",
+    "winston": "^3.2.1"
   },
   "devDependencies": {
-    "@types/bunyan": "^1.8.5",
     "@types/config": "0.0.34",
     "@types/lodash": "^4.14.120",
     "@types/node": "^10.12.20",
     "@types/node-slack": "0.0.30",
+    "@types/winston": "^2.4.4",
     "prettier": "^1.14.2",
     "ts-node": "^8.0.2",
     "tslint": "^5.12.1",

@@ -6,6 +6,11 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
 
 ## [Unreleased]
 
+## [4.1.1] - 2019-02-11
+### Changed
+- Log library from bunyan to winston
+- Bump dependencies to fix #50
+
 ## [4.0.1] - 2019-01-03
 ### Fixed
 - Repeated recovered pod alert when pod with the same container name exist across namespace
