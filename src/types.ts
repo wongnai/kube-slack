@@ -147,6 +147,7 @@ export type MonitorFactory = () => Monitor;
 export interface NotifyMessage {
 	_key: string;
 	channel?: string;
+	username?: string;
 	text?: string;
 	fallback?: string;
 	color?: string;

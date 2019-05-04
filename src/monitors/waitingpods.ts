@@ -36,6 +36,10 @@ class PodStatus extends EventEmitter {
 				if (annotations['kube-slack/slack-channel']) {
 					messageProps.channel = annotations['kube-slack/slack-channel'];
 				}
+
+				if (annotations['kube-slack/slack-username']) {
+					messageProps.username = annotations['kube-slack/slack-username'];
+				}
 			}
 
 			let key = item.pod.metadata.namespace + '/' + item.pod.metadata.name;

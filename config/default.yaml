@@ -28,4 +28,5 @@ metrics_requests: false # Alert if pods are above requests resources (no limits 
 
 # slack_url: 'https://wongnai.slack.com/services/hooks/incoming-webhooks?token=XXXX'
 slack_channel: null
+# slack_username: null
 # slack_proxy: null
