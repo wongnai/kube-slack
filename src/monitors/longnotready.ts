@@ -44,6 +44,10 @@ class PodLongNotReady extends EventEmitter {
 				if (annotations['kube-slack/slack-channel']) {
 					messageProps.channel = annotations['kube-slack/slack-channel'];
 				}
+
+				if (annotations['kube-slack/slack-username']) {
+					messageProps.username = annotations['kube-slack/slack-username'];
+				}
 			}
 
 			if (!pod.status || !pod.status.conditions) {

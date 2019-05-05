@@ -27,6 +27,7 @@ export default class SlackNotifier {
 		}
 
 		let channel = item.channel || config.get('slack_channel');
+		let username = item.username || config.get('slack_username');
 		delete item.channel;
 
 		return this.slack
@@ -34,6 +35,7 @@ export default class SlackNotifier {
 				text: item.text || 'Kubernetes Notification:',
 				attachments: [item],
 				channel,
+				username
 			})
 			.then(
 				() => {
