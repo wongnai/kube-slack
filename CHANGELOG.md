@@ -6,6 +6,10 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
 
 ## [Unreleased]
 
+## [4.2.0] - 2019-05-10
+### Changed
+- Allow to configure the username for slack notifications - @prabhu43
+
 ## [4.1.1] - 2019-02-11
 ### Changed
 - Log library from bunyan to winston
