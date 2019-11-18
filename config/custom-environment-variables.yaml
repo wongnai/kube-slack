@@ -24,6 +24,7 @@ metrics_requests:
   __format: json
 flood_expire: FLOOD_EXPIRE
 not_ready_min_time: NOT_READY_MIN_TIME
+ignore_pods: IGNORE_PODS
 
 slack_url: SLACK_URL
 slack_channel: SLACK_CHANNEL

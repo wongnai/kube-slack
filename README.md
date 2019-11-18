@@ -104,6 +104,7 @@ Additionally, the following environment variables can be used:
 - `TICK_RATE`: How often to update in milliseconds. (Default to 15000 or 15s)
 - `FLOOD_EXPIRE`: Repeat notification after this many milliseconds has passed after status returned to normal. (Default to 60000 or 60s)
 - `NOT_READY_MIN_TIME`: Time to wait after pod become not ready before notifying. (Default to 60000 or 60s)
+- `IGNORE_PODS`: Comma separated list with the name prefix of the pods to ignore. Example: `kube-proxy-gke,prometheus-prometheus-node-exporter`  (Default "")
 - `METRICS_CPU`: Enable/disable metric alerting on cpu (Default true)
 - `METRICS_MEMORY`: Enable/disable metric alerting on memory (Default true)
 - `METRICS_PERCENT`: Set percentage threshold on metric alerts (Default 80)
