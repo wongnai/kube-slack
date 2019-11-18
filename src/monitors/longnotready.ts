@@ -10,11 +10,13 @@ import {
 
 class PodLongNotReady extends EventEmitter {
 	minimumTime: number;
+	ignorePods: string;
 	alerted: { [key: string]: KubernetesPod };
 
 	constructor() {
 		super();
 		this.minimumTime = parseInt(config.get('not_ready_min_time'), 10);
+		this.ignorePods = config.get('ignore_pods');
 		this.alerted = {};
 	}
 
@@ -31,9 +33,23 @@ class PodLongNotReady extends EventEmitter {
 
 	async check() {
 		let pods = await kube.getWatchedPods();
+		const ignorePods = this.ignorePods.split(',')
 
 		for (let pod of pods) {
 			let messageProps: Partial<NotifyMessage> = {};
+			
+			// Ignore pod if exists in ingnore_pods array
+			let skipPod = false;
+			for (let ingnorePod of ignorePods) {
+				if (ingnorePod.length > 0 && pod.metadata.name.startsWith(ingnorePod.trim())) {
+					skipPod = true;
+					break;
+				}
+			}
+			if (skipPod) {
+				continue;
+			}
+
 			let annotations = pod.metadata.annotations;
 			if (annotations) {
 				// Ignore pod if the annotation is set and evaluates to true

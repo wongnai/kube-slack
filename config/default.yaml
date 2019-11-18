@@ -21,6 +21,8 @@ interval: 15000
 flood_expire: 60000
 not_ready_min_time: 60000
 
+ignore_pods: ""
+
 metrics_cpu: true
 metrics_memory: true
 metrics_alert: 80 # percent
