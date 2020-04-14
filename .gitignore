@@ -4,3 +4,4 @@ yarn.lock
 config/local*.yaml
 .vscode
 build/
+.idea
