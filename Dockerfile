@@ -10,7 +10,7 @@ RUN npm run build
 FROM node:10-alpine
 # Don't run as root user
 ENV user kube-slack
-RUN addgroup -S $user && adduser -S -g $user $user
+RUN addgroup -S $user && adduser -S -g $user $user --uid 1000
 
 WORKDIR /app
 COPY package.json /app
@@ -20,6 +20,6 @@ COPY --from=build /app/build/ /app
 COPY config/ /app/config/
 
 RUN chown -R $user:$user /app
-USER $user
+USER 1000
 
 CMD ["node", "."]
