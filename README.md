@@ -115,6 +115,7 @@ Additionally, the following environment variables can be used:
 - `SLACK_USERNAME`: Override username to send
 - `SLACK_PROXY`: URL of HTTP proxy used to connect to Slack
 - `RECOVERY_ALERT`: Set to `false` to disable alert on pod recovery
+- `GREETING_MESSAGE`: Text to insert at begining message
 
 ## Annotations
 

@@ -29,3 +29,4 @@ slack_url: SLACK_URL
 slack_channel: SLACK_CHANNEL
 slack_username: SLACK_USERNAME
 slack_proxy: SLACK_PROXY
+greeting_message: GREETING_MESSAGE
