@@ -25,7 +25,7 @@ apiVersion: rbac.authorization.k8s.io/v1
 metadata:
   name: kube-slack
 rules:
-- apiGroups: [""]
+- apiGroups: ["metrics.k8s.io"]
   resources: ["pods"]
   verbs: ["get", "watch", "list"]
 ---
