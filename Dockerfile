@@ -1,5 +1,5 @@
 # Build
-FROM node:10-alpine AS build
+FROM node:14-alpine AS build
 WORKDIR /app
 COPY package.json /app
 RUN npm install
@@ -7,7 +7,7 @@ COPY . /app
 RUN npm run build
 
 # Run
-FROM node:10-alpine
+FROM node:14-alpine
 # Don't run as root user
 ENV user kube-slack
 RUN addgroup -S $user && adduser -S -g $user $user
