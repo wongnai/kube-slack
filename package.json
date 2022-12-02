@@ -11,7 +11,7 @@
   "dependencies": {
     "config": "^3.0.1",
     "js-yaml": "^3.12.1",
-    "kubernetes-client": "^6.8.3",
+    "kubernetes-client": "^9.0.0",
     "lodash": "^4.17.11",
     "node-slack": "0.0.7",
     "winston": "^3.2.1"
